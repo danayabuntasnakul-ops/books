@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>เปิดไพ่ ฟังใจ — Books by Dan</title>
+<meta name="description" content="เปิดไพ่ ฟังใจ — ไพ่ทาโรต์ฮีลใจ อ่านเป็นได้โดยไม่ต้องท่องจำ หนังสือ PDF โดย ดินแดน สั่งซื้อแล้วได้ไฟล์ทางอีเมลทันที">
+<meta property="og:title" content="เปิดไพ่ ฟังใจ — Books by Dan">
+<meta property="og:description" content="ไพ่ทาโรต์ฮีลใจ อ่านเป็นได้โดยไม่ต้องท่องจำ · หนังสือ PDF 166 หน้า · ราคาเปิดตัว 169 บาท สำหรับ 50 คนแรก · แถมไพ่ 78 ใบ + โต๊ะเปิดไพ่ออนไลน์">
+<meta property="og:image" content="https://books.artproducktion.com/images/cover-c4a.jpg">
+<meta property="og:type" content="book">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Trirong:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans+Thai+Looped:wght@400;500;600&display=swap">
+<style>
+  :root {
+    color-scheme: light;
+    --paper: #F6F4ED;
+    --linen: #E8E1D4;
+    --plum: #492F3F;
+    --forest: #3D553F;
+    --soft-sage: #AAAF8C;
+    --blush: #C7AFA1;
+    --mauve: #A77F89;
+    --ink: #492F3F;
+    --muted: rgba(73, 47, 63, .72);
+    --line: rgba(61, 85, 63, .28);
+    --display: "Trirong", "Noto Serif Thai", Georgia, serif;
+    --body: "IBM Plex Sans Thai Looped", "Noto Sans Thai Looped", "Sukhumvit Set", sans-serif;
+    --shadow: 0 1px 2px rgba(73,47,63,.06), 0 14px 36px rgba(73,47,63,.14);
+    --gutter: 16px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.25; margin: 0; color: var(--plum); }
+  p { margin: 0 0 1em; }
+  a { color: var(--forest); }
+  img { max-width: 100%; height: auto; display: block; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 var(--gutter); }
+  section { padding: 56px 0; }
+  .eyebrow { font-family: var(--body); font-weight: 600; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--forest); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+  .eyebrow svg { width: 18px; height: 21px; stroke: var(--forest); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  h2 { font-size: clamp(26px, 3.4vw, 34px); margin-bottom: 18px; }
+  .lede { font-size: 18px; color: var(--muted); max-width: 62ch; }
+
+  /* top bar */
+  .top { position: sticky; top: 0; z-index: 10; background: rgba(246,244,237,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+  .brand { font-family: var(--display); font-weight: 600; font-size: 18px; color: var(--plum); text-decoration: none; }
+  .brand span { color: var(--forest); font-weight: 400; }
+  .btn { display: inline-block; font-weight: 600; text-decoration: none; border-radius: 999px; padding: 12px 24px; line-height: 1.2; transition: transform .15s ease, box-shadow .15s ease; }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--plum); color: var(--paper); box-shadow: 0 6px 18px rgba(73,47,63,.22); }
+  .btn-primary:hover { box-shadow: 0 8px 24px rgba(73,47,63,.3); }
+  .btn-secondary { background: transparent; color: var(--forest); border: 1.5px solid var(--forest); }
+  .top .btn { padding: 9px 18px; font-size: 15px; }
+
+  /* hero */
+  .hero { padding: 48px 0 64px; position: relative; overflow: hidden; }
+  .hero .wrap { display: grid; grid-template-columns: 1fr; gap: 36px; align-items: center; }
+  .hero-art { position: relative; margin: 0 auto; width: min(78vw, 340px); }
+  .hero-art img { position: relative; border-radius: 6px; box-shadow: var(--shadow); }
+  .hero h1 { font-size: clamp(44px, 7vw, 68px); letter-spacing: .01em; }
+  .hero .tagline { font-family: var(--display); font-size: clamp(19px, 2.4vw, 23px); color: var(--forest); margin: 10px 0 18px; }
+  .hero .author { font-weight: 500; color: var(--muted); margin-bottom: 6px; }
+  .price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px; margin: 18px 0 8px; }
+  .price .now { font-family: var(--display); font-size: 40px; font-weight: 600; color: var(--plum); line-height: 1; }
+  .price .now small { font-size: 18px; font-weight: 400; }
+  .price .was { color: var(--muted); text-decoration: line-through; }
+  .launch-tag { display: inline-block; background: var(--blush); color: var(--plum); font-weight: 600; font-size: 14px; padding: 4px 12px; border-radius: 999px; }
+  .meta { color: var(--muted); font-size: 15px; margin-top: 14px; }
+  .meta span + span::before { content: "·"; margin: 0 8px; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+
+  /* who */
+  .band { background: var(--linen); }
+  .cards3 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 22px 22px 18px; }
+  .card h3 { font-size: 20px; margin-bottom: 8px; }
+  .card p { margin: 0; color: var(--muted); font-size: 16px; }
+
+  /* inside */
+  .parts { display: grid; grid-template-columns: 1fr; gap: 14px; counter-reset: part; }
+  .part { display: grid; grid-template-columns: 48px 1fr; gap: 14px; background: var(--linen); border-radius: 16px; padding: 18px 18px 16px; }
+  .part .num { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--forest); color: var(--forest); font-family: var(--display); font-weight: 600; font-size: 20px; display: grid; place-items: center; background: var(--paper); }
+  .part h3 { font-size: 20px; margin-bottom: 4px; }
+  .part p { margin: 0; color: var(--muted); font-size: 15.5px; line-height: 1.7; }
+  .inside-meta { margin-top: 20px; color: var(--muted); font-size: 15px; }
+
+  /* samples */
+  .samples { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .sample { text-decoration: none; color: inherit; }
+  .sample img { border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); background: #fff; }
+  .sample figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+  .samples-note { margin-top: 18px; font-size: 14px; color: var(--muted); }
+
+  /* author */
+  .author-grid { display: grid; grid-template-columns: 1fr; gap: 28px; align-items: start; }
+  .portrait { width: 220px; aspect-ratio: 3 / 4; margin: 0 auto; border: 2px solid var(--forest); border-radius: 999px 999px 16px 16px; background: var(--linen); overflow: hidden; }
+  .portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .bio p { font-size: 17px; }
+  .bio .nw { white-space: nowrap; }
+
+  /* buy */
+  .steps { list-style: none; padding: 0; margin: 0 0 24px; display: grid; grid-template-columns: 1fr; gap: 12px; counter-reset: step; }
+  .steps li { display: grid; grid-template-columns: 36px 1fr; gap: 12px; align-items: start; }
+  .steps li::before { counter-increment: step; content: counter(step); width: 34px; height: 34px; border-radius: 50%; background: var(--forest); color: var(--paper); font-weight: 600; display: grid; place-items: center; font-size: 15px; }
+  .steps strong { display: block; }
+  .steps span { color: var(--muted); font-size: 15.5px; }
+  .price-band { background: var(--blush); border-radius: 16px; padding: 18px 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; margin-bottom: 20px; }
+  .price-band b { font-family: var(--display); font-size: 26px; font-weight: 600; }
+  .price-band small { color: var(--plum); opacity: .85; }
+  .embed { border: 2px dashed var(--soft-sage); border-radius: 16px; min-height: 260px; display: grid; place-items: center; text-align: center; padding: 28px; color: var(--muted); background: rgba(232,225,212,.45); }
+  .embed strong { color: var(--forest); display: block; margin-bottom: 6px; }
+  .terms { font-size: 14px; color: var(--muted); margin-top: 16px; }
+
+  /* faq */
+  details { border-top: 1px solid var(--line); }
+  details:last-of-type { border-bottom: 1px solid var(--line); }
+  summary { cursor: pointer; list-style: none; padding: 16px 0; font-weight: 600; font-size: 17px; display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font-family: var(--display); font-size: 24px; color: var(--forest); flex: none; }
+  details[open] summary::after { content: "–"; }
+  details p { color: var(--muted); padding-bottom: 16px; margin: 0; }
+
+  /* bonus */
+  #bonus { padding-top: 8px; }
+  .bonus { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: center; background: var(--linen); border-radius: 20px; padding: 26px; }
+  .bonus h3 { font-size: 24px; margin-bottom: 6px; }
+  .bonus p { color: var(--muted); margin-bottom: 14px; }
+
+  /* footer */
+  footer { padding: 40px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14.5px; }
+  footer .wrap { display: grid; gap: 10px; }
+  footer a { color: var(--forest); }
+
+  @media (min-width: 760px) {
+    .hero .wrap { grid-template-columns: 5fr 7fr; gap: 56px; }
+    .hero-art { width: 100%; max-width: 380px; }
+    .cards3 { grid-template-columns: repeat(3, 1fr); }
+    .parts { grid-template-columns: 1fr 1fr; }
+    .part:last-child { grid-column: 1 / -1; }
+    .samples { grid-template-columns: repeat(4, 1fr); }
+    .author-grid { grid-template-columns: 240px 1fr; }
+    .steps { grid-template-columns: repeat(2, 1fr); }
+    .bonus { grid-template-columns: 1fr auto; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="cup" viewBox="0 0 60 70"><path d="M12,8 H48 C48,26 40,36 30,36 C20,36 12,26 12,8 Z M30,36 V54 M19,60 C22,55 38,55 41,60 Z"/></symbol>
+  <symbol id="wand" viewBox="0 0 60 70"><path d="M30,4 V64 M30,20 C24,17 20,12 21,8 C26,9 29,13 30,20 M30,30 C36,27 40,22 39,18 C34,19 31,23 30,30 M30,44 C24,41 20,36 21,32 C26,33 29,37 30,44"/></symbol>
+  <symbol id="sword" viewBox="0 0 60 70"><path d="M30,4 L34,12 V46 H26 V12 Z M18,46 H42 M30,46 V58"/></symbol>
+  <symbol id="pent" viewBox="0 0 60 70"><path d="M30,15 L41.2,49.4 L11.9,28.1 H48.1 L18.8,49.4 Z"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">Books by Dan <span>· ดินแดน</span></a>
+    <a class="btn btn-primary" href="#buy">สั่งซื้อ</a>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-art">
+      <img src="images/cover-c4a.jpg" alt="ปกหนังสือ เปิดไพ่ ฟังใจ" width="1200" height="1703">
+    </div>
+    <div>
+      <p class="author">ดินแดน · หนังสือ PDF</p>
+      <h1>เปิดไพ่ ฟังใจ</h1>
+      <p class="tagline">ไพ่ทาโรต์ฮีลใจ อ่านเป็นได้โดยไม่ต้องท่องจำ</p>
+      <p class="lede">หนังสือสำหรับคนที่อยากใช้ไพ่ทาโรต์ดูแลใจตัวเอง มองภาพ ตั้งคำถาม แล้วเขียนคำตอบลงในเล่ม ไม่ต้องท่องความหมายทั้ง 78 ใบก่อนเริ่มครับ</p>
+      <div class="price">
+        <span class="now">169 <small>บาท</small></span>
+        <span class="was">ราคาปกติ 199 บาท</span>
+        <span class="launch-tag">ราคาเปิดตัว · 50 คนแรก</span>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#buy">สั่งซื้อ รับไฟล์ทางอีเมล</a>
+        <a class="btn btn-secondary" href="#samples">ดูตัวอย่างหน้า</a>
+      </div>
+      <p class="meta"><span>PDF ขนาด A5</span><span>166 หน้า</span><span>พิมพ์หน้าบันทึกได้</span><span>แถมไพ่ 78 ใบ + โต๊ะเปิดไพ่ออนไลน์</span><span>ส่งเข้าอีเมลทันทีหลังชำระเงิน</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="who">
+  <div class="wrap">
+    <p class="eyebrow"><svg><use href="#cup"/></svg>เล่มนี้เหมาะกับใคร</p>
+    <h2>สามคนที่ผมนึกถึงตอนเขียน</h2>
+    <div class="cards3">
+      <div class="card">
+        <h3>คนที่อยากดูแลใจตัวเองวันละไม่กี่นาที</h3>
+        <p>เปิดไพ่หนึ่งใบ ตอบคำถามสั้น ๆ แล้วเขียนลงในเล่ม ไม่ต้องรู้ไพ่มาก่อน</p>
+      </div>
+      <div class="card">
+        <h3>คนที่อยากเริ่มอ่านไพ่ แต่ท้อกับการท่องจำ</h3>
+        <p>เล่มนี้สอนให้อ่านจากภาพก่อน แล้วค่อยรู้จักตำราทีหลัง มีภาพไพ่ประกอบให้ดูในเล่ม</p>
+      </div>
+      <div class="card">
+        <h3>คนที่อยากลองอ่านไพ่ให้เพื่อนหรือคนใกล้ตัว</h3>
+        <p>ภาค 4 พาเดินทีละขั้น ตั้งแต่การฟัง การเล่าไพ่ให้เข้าใจ ไปจนถึงการดูแลตัวเองในฐานะคนอ่านไพ่</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="inside">
+  <div class="wrap">
+    <p class="eyebrow"><svg><use href="#wand"/></svg>ข้างในมีอะไร</p>
+    <h2>4 ภาค กับภาคผนวกที่ใช้ซ้ำได้ทั้งปี</h2>
+    <div class="parts">
+      <div class="part">
+        <div class="num">1</div>
+        <div>
+          <h3>รู้จักไพ่โดยไม่ต้องท่องจำ</h3>
+          <p>ไพ่ทาโรต์คืออะไรและไม่ใช่อะไร · 78 ใบใน 5 นาที · ไพ่ชุดใหญ่ 22 ใบพร้อมภาพ · อ่านจากภาพก่อนอ่านจากตำรา · ไพ่กลับหัว จะใช้หรือไม่ใช้ก็ได้ · ตั้งคำถามให้ได้คำตอบที่เอาไปใช้ได้</p>
+        </div>
+      </div>
+      <div class="part">
+        <div class="num">2</div>
+        <div>
+          <h3>10 ชุดฮีลใจ</h3>
+          <p>เลือกทำตามใจวันนี้ แต่ละชุดมี 3 หัวข้อกับช่วงเจาะลึก มีที่ให้เขียนทุกหน้า: กลับมาหาตัวเอง · หยุดคิดวน · แบตใกล้หมด ขอชาร์จก่อน · อารมณ์มาเยือน · ผิดหวังและหมดไฟ · คนรอบตัว · บ้านและครอบครัว · เรื่องของหัวใจ · งานและเงิน · ความฝันและการเริ่มใหม่</p>
+        </div>
+      </div>
+      <div class="part">
+        <div class="num">3</div>
+        <div>
+          <h3>วางไพ่ 5 แบบ</h3>
+          <p>เช็กใจวันนี้ · รู้สึก ต้องการ ทำได้ · สองทางเลือก · กากบาท · เซลติกครอส — จากไพ่ใบเดียวไปจนถึงการดูเรื่องหนึ่งให้ลึกทั้งเรื่อง</p>
+        </div>
+      </div>
+      <div class="part">
+        <div class="num">4</div>
+        <div>
+          <h3>ก้าวแรกสู่การอ่านไพ่ให้คนอื่น</h3>
+          <p>7 บท: อ่านให้ตัวเองให้ได้ก่อน · จรรยาบรรณพื้นฐาน · ฟังก่อนเปิดไพ่ · เล่าไพ่ให้คนฟังเข้าใจ · ลงสนามจริง และขอความเห็นกลับ · ดูแลตัวเองในฐานะคนอ่านไพ่ · ถ้าอยากทำเป็นอาชีพ</p>
+        </div>
+      </div>
+      <div class="part">
+        <div class="num">+</div>
+        <div>
+          <h3>ภาคผนวก</h3>
+          <p>78 ใบ 78 คำถามดูแลใจ · แบบบันทึกการเปิดไพ่ · ตารางนับไพ่ที่ออกบ่อย · หน้าทบทวนสิ้นเดือน · พจนานุกรมไพ่ของฉัน — พิมพ์ซ้ำได้ตามต้องการ</p>
+        </div>
+      </div>
+    </div>
+    <p class="inside-meta">ภาพไพ่: Dan Tarot โดย ArtproDucktion · ภาพสร้างด้วย AI กำกับองค์ประกอบโดย Dan</p>
+  </div>
+</section>
+
+<section class="band" id="samples">
+  <div class="wrap">
+    <p class="eyebrow"><svg><use href="#sword"/></svg>ตัวอย่างหน้า</p>
+    <h2>เปิดดูข้างในก่อนตัดสินใจ</h2>
+    <div class="samples">
+      <a class="sample" href="images/sample-p20.jpg" target="_blank" rel="noopener">
+        <figure style="margin:0">
+          <img src="images/sample-p20.jpg" alt="ตัวอย่างหน้า ภาค 1 ไพ่ชุดใหญ่" loading="lazy" width="1008" height="1428">
+          <figcaption>ภาค 1 · ไพ่ชุดใหญ่ ดูภาพแล้วอ่านความหมาย</figcaption>
+        </figure>
+      </a>
+      <a class="sample" href="images/sample-p44.jpg" target="_blank" rel="noopener">
+        <figure style="margin:0">
+          <img src="images/sample-p44.jpg" alt="ตัวอย่างหน้า ภาค 2 ชุดฮีลใจ" loading="lazy" width="1008" height="1428">
+          <figcaption>ภาค 2 · หน้าชุดฮีลใจ มีที่ให้เขียน</figcaption>
+        </figure>
+      </a>
+      <a class="sample" href="images/sample-p112.jpg" target="_blank" rel="noopener">
+        <figure style="margin:0">
+          <img src="images/sample-p112.jpg" alt="ตัวอย่างหน้า ภาค 3 วางไพ่สองทางเลือก" loading="lazy" width="1008" height="1428">
+          <figcaption>ภาค 3 · วางไพ่แบบสองทางเลือก</figcaption>
+        </figure>
+      </a>
+      <a class="sample" href="images/sample-p127.jpg" target="_blank" rel="noopener">
+        <figure style="margin:0">
+          <img src="images/sample-p127.jpg" alt="ตัวอย่างหน้า ภาค 4 ตัวอย่างการอ่านไพ่ 3 ใบ" loading="lazy" width="1008" height="1428">
+          <figcaption>ภาค 4 · ตัวอย่างการอ่านไพ่ 3 ใบ</figcaption>
+        </figure>
+      </a>
+    </div>
+    <p class="samples-note">แตะที่ภาพเพื่อดูขนาดเต็ม</p>
+  </div>
+</section>
+
+<section id="author">
+  <div class="wrap">
+    <p class="eyebrow"><svg><use href="#pent"/></svg>ผู้เขียน</p>
+    <h2>ดินแดน</h2>
+    <div class="author-grid">
+      <div class="portrait"><img src="images/author-dindan.jpg" alt="ดินแดน ผู้เขียน" width="600" height="800" loading="lazy"></div>
+      <div class="bio">
+        <p>ดินแดน คือนามปากกาของผม <span class="nw">ดนย บุญทัศนกุล</span> ชื่อนี้บ่งบอกถึงพื้นที่อีก<span class="nw">แห่งหน</span> ที่ผมได้ย่างเท้าเข้าไปทำความรู้จัก</p>
+        <p>ตลอดกว่า 10 ปีที่เดินสำรวจอยู่ในที่แห่งนี้ ผมได้ทั้งเรียนรู้และค้นพบหลายสิ่ง โดยเฉพาะสะพานที่เชื่อมดินแดนต่าง ๆ ซึ่งผมเคยสัมผัส ให้<span class="nw">เกี่ยวกระหวัด</span>กันไว้ด้วยแง่มุมของความเป็นมนุษย์ สำหรับผม ไพ่ทาโรต์ไม่ใช่แค่การหยั่งรู้ หรือทำนายทายทักเรื่องราวในอนาคต แต่คือการยืนยันคำตอบที่ยังไม่ถูกเอื้อนเอ่ยออกมา</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="buy">
+  <div class="wrap">
+    <p class="eyebrow"><svg><use href="#cup"/></svg>วิธีซื้อ</p>
+    <h2>สั่งซื้อแล้วได้ไฟล์ภายใน 1 นาที</h2>
+    <div class="price-band">
+      <div><b>169 บาท</b> <small>ราคาเปิดตัวสำหรับ 50 คนแรก</small></div>
+      <small>หลังจากนั้นราคาปกติ 199 บาท</small>
+    </div>
+    <ol class="steps">
+      <li><div><strong>กรอกชื่อและอีเมล</strong><span>ไฟล์จะส่งไปที่อีเมลนี้ กรุณาตรวจให้ถูกต้อง</span></div></li>
+      <li><div><strong>สแกน QR พร้อมเพย์ โอนตามยอด</strong><span>โอนด้วยแอปธนาคารใดก็ได้</span></div></li>
+      <li><div><strong>แนบสลิปในแบบฟอร์ม</strong><span>ระบบตรวจสลิปอัตโนมัติ ใช้เวลาไม่กี่วินาที</span></div></li>
+      <li><div><strong>รับไฟล์ทางอีเมล</strong><span>ปกติภายใน 1 นาที พร้อมหลักฐานการซื้อในอีเมลเดียวกัน</span></div></li>
+    </ol>
+    <div class="embed">
+      <div>
+        <strong>แบบฟอร์มสั่งซื้อจะอยู่ตรงนี้</strong>
+        ระบบกำลังจัดเตรียม เปิดรับคำสั่งซื้อเร็ว ๆ นี้ครับ
+      </div>
+    </div>
+    <p class="terms">สินค้าดิจิทัล ไม่คืนเงิน ยกเว้นไฟล์เสียเปิดไม่ได้ ผมจะส่งไฟล์ใหม่ให้ · ภาพสลิปจะถูกส่งตรวจกับผู้ให้บริการตรวจสลิป (EasySlip) เพื่อยืนยันการชำระเงิน · ชื่อและอีเมลใช้เพื่อส่งไฟล์และหลักฐานการซื้อเท่านั้น</p>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <p class="eyebrow"><svg><use href="#wand"/></svg>คำถามพบบ่อย</p>
+    <h2>ก่อนตัดสินใจ</h2>
+    <details>
+      <summary>ซื้อแล้วได้ไฟล์เมื่อไร</summary>
+      <p>ทันทีที่ระบบตรวจสลิปผ่าน ไฟล์จะส่งเข้าอีเมลที่คุณกรอก ปกติไม่เกิน 1 นาทีครับ ถ้าเกิน 10 นาทียังไม่เห็น ลองดูในกล่องสแปมก่อน ถ้ายังไม่เจอ อีเมลมาที่ artproducktion@gmail.com ผมส่งให้ใหม่</p>
+    </details>
+    <details>
+      <summary>เปิดบนมือถือ ไอแพด หรือคอมได้ไหม</summary>
+      <p>ได้ทุกเครื่องครับ ไฟล์เป็น PDF ขนาด A5 เปิดด้วยแอปอ่าน PDF ทั่วไป บน iPhone และ iPad เปิดในแอป Books ได้เลย</p>
+    </details>
+    <details>
+      <summary>พิมพ์ออกมาเขียนได้ไหม</summary>
+      <p>ได้ครับ เล่มนี้ออกแบบให้พิมพ์ขนาด A5 หรือ A4 แบบ 2 หน้าต่อแผ่น หน้าบันทึกในภาคผนวกพิมพ์ซ้ำได้ตามต้องการ สำหรับใช้ส่วนตัว</p>
+    </details>
+    <details>
+      <summary>ยังไม่มีไพ่ทาโรต์ เริ่มได้ไหม</summary>
+      <p>ได้ครับ เริ่มอ่านภาค 1 ได้เลย หนังสือมีไพ่ 78 ใบมาให้พร้อมเล่ม ทั้งแบบ "โต๊ะเปิดไพ่" สุ่มไพ่บนหน้าจอ และแบบไฟล์ภาพที่พิมพ์ไว้ใช้เองได้ พอรู้ว่าชอบค่อยหาสำรับที่ถูกใจ</p>
+    </details>
+    <details>
+      <summary>ไฟล์หาย ขอใหม่ได้ไหม</summary>
+      <p>ได้ครับ อีเมลมาที่ artproducktion@gmail.com ด้วยอีเมลที่ใช้ตอนซื้อ ผมส่งไฟล์ให้ใหม่โดยไม่คิดเงิน</p>
+    </details>
+    <details>
+      <summary>คืนเงินได้ไหม</summary>
+      <p>ไม่คืนครับ เพราะเป็นสินค้าดิจิทัลที่ส่งไฟล์ให้ทันที ยกเว้นไฟล์เสียเปิดไม่ได้ ผมจะส่งไฟล์ใหม่ให้</p>
+    </details>
+    <details>
+      <summary>ออกใบกำกับภาษีได้ไหม</summary>
+      <p>ไม่ได้ครับ ผมขายในนามบุคคลธรรมดา แต่จะส่งหลักฐานการซื้อ (เลขที่คำสั่งซื้อ วันที่ รายการ ยอดเงิน) ไปในอีเมลเดียวกับไฟล์</p>
+    </details>
+  </div>
+</section>
+
+<section id="bonus">
+  <div class="wrap">
+    <div class="bonus">
+      <div>
+        <p class="eyebrow"><svg><use href="#pent"/></svg>ของแถม</p>
+        <h3>โต๊ะเปิดไพ่</h3>
+        <p>เว็บสุ่มเปิดไพ่ครบ 78 ใบบนหน้าจอ มีแบบวางไพ่ให้เลือก ใช้คู่กับเล่มนี้ได้ทันทีแม้ยังไม่มีสำรับ เปิดบนมือถือได้ ไม่ต้องติดตั้งอะไร</p>
+      </div>
+      <a class="btn btn-secondary" href="draw/">เปิดโต๊ะเปิดไพ่</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>ติดต่อ: <a href="mailto:artproducktion@gmail.com">artproducktion@gmail.com</a> · Instagram <a href="https://www.instagram.com/artproducktion" target="_blank" rel="noopener">@artproducktion</a></div>
+    <div>เปิดไพ่ ฟังใจ · เขียนโดย ดินแดน · จำหน่ายโดย <a href="https://artproducktion.com">ArtproDucktion</a> · ไฟล์สำหรับใช้ส่วนตัว ไม่เผยแพร่ต่อ</div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,533 @@
+<meta charset="utf-8">
+<title>โต๊ะเปิดไพ่</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Trirong:ital,wght@0,300;0,400;0,600;1,400&family=IBM+Plex+Sans+Thai+Looped:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #E9ECE6; --paper: #F8F9F5; --ink: #27302B; --muted: #5C6861; --line: #CBD3C8;
+    --sage: #56775F; --sage-tint: #E2EAE1; --plum: #74536C; --plum-tint: #F1E9EF;
+    --back-a: #56775F; --back-b: #74536C; --back-line: #F3EDE2;
+    --shadow: 0 1px 2px rgba(39,48,43,.06), 0 8px 24px rgba(39,48,43,.10);
+    --display: "Trirong", "Noto Serif Thai", Georgia, serif;
+    --body: "IBM Plex Sans Thai Looped", "Noto Sans Thai Looped", "Sukhumvit Set", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #141815; --paper: #1D231F; --ink: #E3E8E0; --muted: #A2ADA5; --line: #3A443D;
+      --sage: #94B79D; --sage-tint: #25302A; --plum: #CFA9C7; --plum-tint: #2E2430;
+      --back-a: #3E5A46; --back-b: #5A3F55; --back-line: #D9D2C4;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #141815; --paper: #1D231F; --ink: #E3E8E0; --muted: #A2ADA5; --line: #3A443D;
+    --sage: #94B79D; --sage-tint: #25302A; --plum: #CFA9C7; --plum-tint: #2E2430;
+    --back-a: #3E5A46; --back-b: #5A3F55; --back-line: #D9D2C4;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.4);
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }   /* ให้ hidden ชนะ display:grid ของ .panel/.deck */
+  body { background: var(--ground); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.7; padding-inline: 16px; padding-block: 24px 56px; margin: 0; }
+  .wrap { max-width: 980px; margin-inline: auto; display: grid; gap: 22px; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; line-height: 1.3; text-wrap: balance; }
+  p { margin: 0; }
+  button, select { font: inherit; }
+  :focus-visible { outline: 2px solid var(--plum); outline-offset: 3px; }
+
+  header { display: grid; gap: 4px; }
+  header h1 { font-size: clamp(32px, 7vw, 46px); font-weight: 300; color: var(--sage); }
+  header p { color: var(--muted); }
+
+  .panel { background: var(--paper); box-shadow: var(--shadow); border-radius: 6px; padding: 18px clamp(16px, 4vw, 26px); display: grid; gap: 14px; }
+  .step { font-size: 12.5px; font-weight: 600; letter-spacing: .06em; color: var(--sage); }
+  .controls { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .controls { grid-template-columns: 1.4fr 1fr; align-items: end; } }
+  label.field { display: grid; gap: 6px; font-size: 14px; color: var(--muted); }
+  select { width: 100%; padding: 10px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--ground); color: var(--ink); }
+  .toggle { display: flex; gap: 12px; align-items: center; cursor: pointer; font-size: 15px; }
+  .toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .toggle .sw { width: 46px; height: 26px; border-radius: 99px; background: var(--line); position: relative; flex: none; transition: background .2s; }
+  .toggle .sw::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--paper); box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s; }
+  .toggle input:checked + .sw { background: var(--plum); }
+  .toggle input:checked + .sw::after { transform: translateX(20px); }
+  .toggle input:focus-visible + .sw { outline: 2px solid var(--plum); outline-offset: 3px; }
+  .hint { font-size: 13.5px; color: var(--muted); }
+  .spread-info { font-size: 14.5px; color: var(--muted); }
+  .spread-info b { color: var(--ink); font-weight: 600; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn { border: 0; border-radius: 99px; padding: 10px 20px; cursor: pointer; font-weight: 500; }
+  .btn.primary { background: var(--sage); color: var(--paper); }
+  .btn.secondary { background: var(--plum-tint); color: var(--plum); }
+  .btn.ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+  .btn.choice { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+  .btn.choice[aria-pressed="true"] { background: var(--plum); color: var(--paper); border-color: var(--plum); }
+  .btn[disabled] { opacity: .45; cursor: default; }
+
+  .status { font-size: 15px; }
+  /* โหมดบันทึกไพ่ที่เปิดเอง */
+  .logrow { display: grid; gap: 6px; padding: 12px 0; border-top: 1px solid var(--line); }
+  .logrow .pos { font-size: 13px; color: var(--muted); } .logrow .pos b { color: var(--sage); }
+  .logpick { display: flex; gap: 8px; }
+  .logq { flex: 1; min-width: 0; padding: 10px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--ground); color: var(--ink); font: inherit; }
+  .logres { display: grid; gap: 4px; }
+  .logres button { text-align: left; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--ground); color: var(--ink); cursor: pointer; }
+  .logres button small { color: var(--muted); margin-left: 6px; }
+  .logsel { font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .logsel b { color: var(--ink); }
+  .logthumb { width: 28px; aspect-ratio: 7 / 12; border-radius: 3px; }
+  .status b { color: var(--plum); font-weight: 600; }
+
+  .deck { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 6px; }
+  .back { aspect-ratio: 7 / 12; border-radius: 5px; border: 0; padding: 0; cursor: pointer; position: relative;
+    background: url("https://artproducktion.com/cards/back.png") center / 100% 100% no-repeat;   /* หลังไพ่จริงของสำรับ */
+    box-shadow: 0 1px 2px rgba(0,0,0,.15);
+    transition: transform .15s; }
+  .back:hover { transform: translateY(-2px); }
+  .back[aria-pressed="true"] { transform: translateY(-6px); box-shadow: 0 0 0 3px var(--plum); }
+  .back .pick-no { position: absolute; inset: auto 0 4px 0; text-align: center; font-size: 12px; font-weight: 600; color: #fff; }
+  .deck.shuffling .back { animation: jiggle .5s ease-in-out; }
+  @keyframes jiggle { 25% { transform: translate(-3px, 2px) rotate(-3deg); } 50% { transform: translate(3px, -2px) rotate(3deg); } 75% { transform: translate(-2px, 1px) rotate(-1deg); } }
+  @media (prefers-reduced-motion: reduce) { .deck.shuffling .back { animation: none; } .back, .flip .inner { transition: none !important; } }
+
+  .reading { display: grid; gap: 16px; }
+  .slots { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  @media (min-width: 880px) {
+    .slots.cross { grid-template-columns: repeat(3, 170px); grid-template-areas: ". p4 ." "p2 p1 p3" ". p5 ."; justify-content: center; }
+    .slots.celtic { grid-template-columns: repeat(5, minmax(0, 140px)); grid-template-areas:
+        ". p3 . . p10" "p5 p1 p2 p6 p9" ". p4 . . p8" ". . . . p7"; justify-content: center; }
+    .slots.cross .slot:nth-child(1) { grid-area: p1; } .slots.cross .slot:nth-child(2) { grid-area: p2; }
+    .slots.cross .slot:nth-child(3) { grid-area: p3; } .slots.cross .slot:nth-child(4) { grid-area: p4; }
+    .slots.cross .slot:nth-child(5) { grid-area: p5; }
+    .slots.celtic .slot:nth-child(1) { grid-area: p1; } .slots.celtic .slot:nth-child(2) { grid-area: p2; }
+    .slots.celtic .slot:nth-child(3) { grid-area: p3; } .slots.celtic .slot:nth-child(4) { grid-area: p4; }
+    .slots.celtic .slot:nth-child(5) { grid-area: p5; } .slots.celtic .slot:nth-child(6) { grid-area: p6; }
+    .slots.celtic .slot:nth-child(7) { grid-area: p7; } .slots.celtic .slot:nth-child(8) { grid-area: p8; }
+    .slots.celtic .slot:nth-child(9) { grid-area: p9; } .slots.celtic .slot:nth-child(10) { grid-area: p10; }
+  }
+  .slot { display: grid; gap: 6px; align-content: start; }
+  .slot .pos { font-size: 13px; color: var(--muted); line-height: 1.45; min-height: 2.9em; }
+  .slot .pos b { color: var(--sage); font-variant-numeric: tabular-nums; }
+  .flip { border: 0; padding: 0; background: none; cursor: pointer; perspective: 800px; width: 100%; max-width: 150px; aspect-ratio: 7 / 12; }
+  .flip .inner { display: block; position: relative; width: 100%; height: 100%; transition: transform .5s; transform-style: preserve-3d; }
+  .flip.open .inner { transform: rotateY(180deg); }
+  .flip .face, .flip .backface { display: block; position: absolute; inset: 0; backface-visibility: hidden; border-radius: 6px; overflow: hidden; }
+  .flip .backface { background: url("https://artproducktion.com/cards/back.png") center / 100% 100% no-repeat; }   /* หลังไพ่จริงของสำรับ */
+  .flip .face { transform: rotateY(180deg); box-shadow: var(--shadow); background: var(--paper); }
+  .flip .face img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .flip .face.rev img { transform: rotate(180deg); }
+  .slot .nm { font-size: 14px; font-weight: 600; }
+  .slot .nm small { display: block; font-weight: 400; color: var(--muted); }
+  .badge { display: inline-block; font-size: 11.5px; font-weight: 600; color: var(--plum); background: var(--plum-tint); border-radius: 99px; padding: 0 8px; }
+
+  .detail { display: grid; gap: 10px; border-top: 1px solid var(--line); padding-top: 16px; }
+  .detail h3 { font-size: 22px; }
+  .detail .sub { color: var(--muted); font-size: 14.5px; }
+  .detail .tag { font-family: var(--display); font-style: italic; font-size: 18px; color: var(--plum); }
+  .detail .row { display: grid; grid-template-columns: 5.2em 1fr; gap: 10px; font-size: 15px; }
+  .detail .row .k { font-size: 12.5px; font-weight: 600; color: var(--muted); padding-top: 2px; }
+  .detail .ask { font-family: var(--display); font-size: 17px; }
+  .detail .note { font-size: 14px; color: var(--muted); background: var(--sage-tint); border-radius: 6px; padding: 10px 12px; }
+  .pickset { font-family: var(--display); font-size: 20px; color: var(--sage); }
+
+  footer { font-size: 13px; color: var(--muted); display: grid; gap: 4px; }
+</style>
+
+<main class="wrap">
+  <header>
+    <h1>โต๊ะเปิดไพ่</h1>
+    <p>ไม่มีไพ่อยู่ในมือก็เปิดได้ · ใช้คู่กับหนังสือ เปิดไพ่ ฟังใจ โดย ดินแดน</p>
+  </header>
+
+  <!-- โหมด: เปิดไพ่บนเว็บ / บันทึกไพ่ที่เปิดเอง (Dan 6 ต.ค. 2569: 2B) -->
+  <section class="panel">
+    <p class="step">โหมด</p>
+    <div class="actions" role="group" aria-label="โหมด">
+      <button class="btn choice" id="modeDraw" type="button" aria-pressed="true">เปิดไพ่บนเว็บ</button>
+      <button class="btn choice" id="modeLog" type="button" aria-pressed="false">บันทึกไพ่ที่เปิดเอง</button>
+    </div>
+    <p class="hint">มีสำรับในมือและเปิดเองแล้ว? ใช้ "บันทึกไพ่ที่เปิดเอง" ใส่ไพ่ที่ได้ทีละตำแหน่ง ใบไหนกลับหัวก็ติ๊กได้เป็นใบ แล้วอ่านความหมายและคัดลอกบันทึกเก็บไว้</p>
+  </section>
+
+  <section class="panel" aria-labelledby="s1">
+    <p class="step" id="s1">1 · เลือกแบบการวางไพ่</p>
+    <div class="controls">
+      <label class="field" for="spread">แบบการวางไพ่
+        <select id="spread"></select>
+      </label>
+    </div>
+    <p class="spread-info" id="spreadInfo"></p>
+  </section>
+
+  <!-- ไพ่กลับหัว: ต้องเลือกก่อนสับไพ่ เพราะทิศของทุกใบถูกสุ่มตอนสับ (Dan 6 ต.ค. 2569) -->
+  <section class="panel drawonly" aria-labelledby="s1b">
+    <p class="step" id="s1b">2 · จะใช้ไพ่กลับหัวไหม — เลือกก่อนสับไพ่</p>
+    <div class="actions" role="group" aria-label="ไพ่กลับหัว">
+      <button class="btn choice" id="revNo" type="button" aria-pressed="false">ไม่ใช้ · ทุกใบตั้งตรง</button>
+      <button class="btn choice" id="revYes" type="button" aria-pressed="false">ใช้ · คละทิศตอนสับ</button>
+    </div>
+    <p class="hint">ไพ่จะถูกคละทิศตอนสับ เปลี่ยนใจทีหลังต้องสับใหม่ · ยังไม่แน่ใจ เลือก "ไม่ใช้" ก่อนก็ได้ อ่านเรื่องนี้ในบทที่ 5 ของเล่ม</p>
+    <input type="checkbox" id="rev" hidden>
+  </section>
+
+  <!-- โหมดบันทึกไพ่ที่เปิดเอง -->
+  <section class="panel" id="logPanel" hidden aria-labelledby="sL">
+    <p class="step" id="sL">2 · ใส่ไพ่ที่เปิดได้ทีละตำแหน่ง · ใบไหนกลับหัว แตะปุ่ม "กลับหัว"</p>
+    <div id="logRows"></div>
+    <div class="actions">
+      <button class="btn primary" id="showLog" type="button" disabled>ดูไพ่และความหมาย</button>
+      <button class="btn secondary" id="copyLog" type="button" disabled>คัดลอกบันทึก</button>
+      <button class="btn ghost" id="clearLog" type="button">ล้าง</button>
+    </div>
+    <p class="status" id="logStatus" aria-live="polite"></p>
+  </section>
+
+  <section class="panel drawonly" aria-labelledby="s2">
+    <p class="step" id="s2">3 · ตั้งคำถามในใจ แล้วสับไพ่</p>
+    <div class="actions">
+      <button class="btn primary" id="shuffle" type="button">สับไพ่</button>
+      <button class="btn secondary" id="auto" type="button" disabled>ให้ระบบหยิบให้</button>
+      <button class="btn ghost" id="reset" type="button">เริ่มใหม่</button>
+    </div>
+    <p class="status" id="status" aria-live="polite">ยังไม่ได้สับไพ่</p>
+    <div class="deck" id="deck" hidden></div>
+  </section>
+
+  <section class="panel reading" id="readingPanel" hidden aria-labelledby="s3">
+    <p class="step" id="s3">4 · แตะไพ่ทีละใบเพื่อเปิด</p>
+    <div class="actions">
+      <button class="btn secondary" id="openAll" type="button">เปิดทั้งหมด</button>
+    </div>
+    <div class="slots" id="slots"></div>
+    <div class="detail" id="detail" hidden></div>
+  </section>
+
+  <footer>
+    <p>ภาพไพ่สร้างด้วย AI กำกับองค์ประกอบโดย Dan · © ArtproDucktion</p>
+    <p>เว็บนี้ไม่เก็บข้อมูลใด ๆ ของคุณ ไพ่แต่ละใบสุ่มในเครื่องของคุณเอง</p>
+    <p>ถ้าช่วงนี้ใจหนักจนดูแลตัวเองไม่ไหว โทรสายด่วนสุขภาพจิต 1323 ได้ตลอด 24 ชั่วโมง</p>
+  </footer>
+</main>
+
+<script>
+const MAJORS = [{"n": 0, "en": "The Fool", "th": "คนเริ่มออกเดินทาง", "tag": "กลัวสายตาชาวโลก หรือกล้าทำตามความฝัน", "img_desc": "คนหนุ่มถือห่อผ้าเดินเพลินอยู่ริมหน้าผา หมาตัวเล็กกระโดดอยู่ข้างเท้า", "mean": "การเริ่มต้นใหม่ ความกล้าก้าวทั้งที่ยังไม่รู้ทาง ใจที่ยังสดใหม่", "ask": "ถ้ากล้า ฉันจะเลือกเดินตามความฝันเรื่องใด"}, {"n": 1, "en": "The Magician", "th": "นักมายากล", "tag": "ของครบในมือ เหลือแค่ลงมือ", "img_desc": "มือหนึ่งชูขึ้นฟ้า มือหนึ่งชี้ลงดิน บนโต๊ะมีถ้วย ดาบ ไม้เท้า และเหรียญครบ", "mean": "คุณมีเครื่องมือครบแล้ว ความสามารถ การลงมือทำให้ความคิดกลายเป็นของจริง", "ask": "ฉันจะใช้สิ่งที่มีอยู่แล้วให้เกิดประโยชน์สูงสุดอย่างไร"}, {"n": 2, "en": "The High Priestess", "th": "นักบวชหญิง", "tag": "เงียบให้พอ แล้วใจจะพูดเอง", "img_desc": "หญิงนั่งนิ่งระหว่างเสาดำกับเสาขาว มีม่านอยู่ข้างหลัง และพระจันทร์เสี้ยวที่ปลายเท้า", "mean": "เสียงข้างใน ความรู้ที่ไม่ต้องมีเหตุผลมารองรับ ความนิ่งที่ทำให้ได้ยินตัวเอง", "ask": "เสียงที่ดังอยู่ลึก ๆ ในใจ กำลังบอกอะไรฉัน"}, {"n": 3, "en": "The Empress", "th": "จักรพรรดินี", "tag": "ดูแลทุกคนมาทั้งวัน ถึงคิวดูแลตัวเองบ้าง", "img_desc": "หญิงนั่งพักบนเบาะนุ่มกลางทุ่งข้าวสาลี มีลำธารไหลผ่าน", "mean": "ความอุดมสมบูรณ์ การดูแลและการได้รับการดูแล ร่างกาย ความสุขที่จับต้องได้ ความคิดสร้างสรรค์ ใบนี้คือใบอนุญาตให้พักแบบไม่ต้องรู้สึกผิด", "ask": "วันนี้ฉันจะดูแลตัวเองให้รู้สึกเต็มได้อย่างไร"}, {"n": 4, "en": "The Emperor", "th": "จักรพรรดิ", "tag": "ชีวิตเรา เราคุมเอง", "img_desc": "ชายในชุดเกราะนั่งบนบัลลังก์หินที่ประดับหัวแกะ ข้างหลังเป็นภูเขาแห้ง", "mean": "โครงสร้าง ขอบเขต ความมั่นคง วินัย การเป็นผู้นำชีวิตของตัวเอง", "ask": "ขอบเขตความรับผิดชอบต่อตัวเองของฉันอยู่ตรงไหน"}, {"n": 5, "en": "The Hierophant", "th": "ผู้นำทางศาสนา", "tag": "ครูชี้ทาง แต่เราต้องเดินเอง", "img_desc": "ผู้นำทางศาสนานั่งระหว่างเสา มีสองคนคุกเข่าฟังอยู่ข้างหน้า และมีกุญแจสองดอกวางไขว้กันที่พื้น", "mean": "ครู ธรรมเนียม การเรียนจากคนที่รู้จริง การเป็นส่วนหนึ่งของกลุ่ม", "ask": "ฉันได้ตระหนักรู้สิ่งใดบ้างด้วยตัวเอง"}, {"n": 6, "en": "The Lovers", "th": "คู่รัก", "tag": "รู้ค่าตัวเอง แล้วจะเลือกได้ไม่ผิด", "img_desc": "ชายหญิงยืนอยู่ใต้ทูตสวรรค์ ข้างหลังฝ่ายหญิงมีต้นไม้ที่มีงูพันอยู่", "mean": "ความรัก ความใกล้ชิด และการเลือกที่ตรงกับหัวใจ ใบนี้ไม่ได้พูดแค่เรื่องแฟน แต่พูดถึงทุกทางเลือกที่ต้องใช้ใจตัดสิน", "ask": "สิ่งที่ฉันเลือกอยู่ตอนนี้ ควรคู่กับคุณค่าในตัวเองแค่ไหน"}, {"n": 7, "en": "The Chariot", "th": "รถศึก", "tag": "ใจพร้อมเมื่อไร ทางข้างหน้าก็ไม่น่ากลัว", "img_desc": "นักรบยืนบนรถศึก มีสฟิงซ์สีขาวกับสีดำนั่งอยู่หน้ารถ", "mean": "ความตั้งใจ การมุ่งหน้า การคุมสองแรงที่ดึงกันอยู่ให้ไปทางเดียวกัน", "ask": "ฉันจะเตรียมตัวเตรียมใจอย่างไร กับสิ่งที่ยังไม่เกิดบนเส้นทางข้างหน้า"}, {"n": 8, "en": "Strength", "th": "ความเข้มแข็ง", "tag": "สิงโตในใจ ไม่ต้องขัง แค่ต้องรู้จัก", "img_desc": "หญิงใช้มือจับปากสิงโตอย่างนุ่มนวล และสิงโตก็ยอมแต่โดยดี", "mean": "ความเข้มแข็งแต่อ่อนโยน ความอดทน การใส่ใจมุมร้าย ๆ ในตัวเองด้วยความเข้าใจ (เช่น อารมณ์ตอนหิว)", "ask": "ฉันรู้จักอารมณ์ของตัวเองในแง่มุมไหนบ้าง"}, {"n": 9, "en": "The Hermit", "th": "ฤๅษี", "tag": "ห่างผู้คนสักพัก เพื่อใกล้ตัวเองอีกนิด", "img_desc": "ชายชราถือตะเกียงยืนอยู่บนยอดเขาคนเดียว", "mean": "การถอยออกมาอยู่กับตัวเอง การคิดทบทวน การหาคำตอบจากข้างใน ใบนี้ในยุคเราคือการปิดแจ้งเตือนสักคืน", "ask": "ถ้าได้อยู่เงียบ ๆ กับตัวเองสักพัก ฉันอยากครุ่นคิดเรื่องอะไร"}, {"n": 10, "en": "Wheel of Fortune", "th": "กงล้อแห่งโชคชะตา", "tag": "คุมโชคไม่ได้ แต่คุมใจได้", "img_desc": "วงล้อใหญ่กลางท้องฟ้า มีสฟิงซ์นั่งอยู่ด้านบน และสัตว์มีปีกนั่งอ่านหนังสืออยู่สี่มุม", "mean": "วัฏจักร จุดเปลี่ยน เรื่องที่อยู่นอกการควบคุม ขึ้นแล้วก็มีลง ลงแล้วก็มีขึ้น", "ask": "อะไรที่ฉันควบคุมไม่ได้ และอะไรที่ฉันยังเลือกได้"}, {"n": 11, "en": "Justice", "th": "ความยุติธรรม", "tag": "ชั่งใจให้เที่ยง แล้วค่อยตัดสิน", "img_desc": "คนสวมมงกุฎนั่งตัวตรง มือหนึ่งถือดาบ อีกมือถือตาชั่ง", "mean": "ความเป็นธรรม ความจริง ผลของการกระทำ การตัดสินใจอย่างรับผิดชอบ", "ask": "ถ้ามองเรื่องนี้อย่างยุติธรรมกับทุกคน รวมถึงกับตัวฉันเอง ฉันจะเห็นอะไร"}, {"n": 12, "en": "The Hanged Man", "th": "คนห้อยหัว", "tag": "ลองกลับหัวดูบ้าง เรื่องเดิมอาจไม่เหมือนเดิม", "img_desc": "ชายห้อยหัวลงจากต้นไม้ด้วยเท้าข้างเดียว แต่หน้าตาสงบ และมีแสงรอบศีรษะ", "mean": "การหยุดรอ การยอมให้เรื่องเป็นไปตามจังหวะของมัน การมองจากมุมใหม่ เหมือนรถติดบนทางด่วนที่ทำอะไรไม่ได้ นอกจากเปิดเพลงดี ๆ แล้วหายใจ", "ask": "ถ้าลองมองเรื่องนี้จากทิศทางอื่น ฉันเห็นอะไร"}, {"n": 13, "en": "Death", "th": "การเปลี่ยนผ่าน", "tag": "ปล่อยมือจากของเก่า ถึงจะมีมือว่างรับของใหม่", "img_desc": "โครงกระดูกในชุดเกราะขี่ม้าขาว ถือธงสีดำลายกุหลาบขาว ไกล ๆ มีดวงอาทิตย์อยู่ระหว่างหอคอยสองหลัง", "mean": "การจบ การเปลี่ยนผ่าน การปล่อยของเก่าเพื่อให้มีที่ว่างสำหรับสิ่งใหม่ ไม่ได้หมายถึงความตายจริง", "ask": "อะไรที่จบไปแล้ว แต่ฉันยังไม่ยอมปล่อย"}, {"n": 14, "en": "Temperance", "th": "ความพอดี", "tag": "ชีวิตก็เหมือนชานม หวานพอดีถึงอร่อย", "img_desc": "ทูตสวรรค์เทน้ำจากถ้วยหนึ่งไปอีกถ้วย เท้าข้างหนึ่งแตะน้ำ อีกข้างอยู่บนดิน", "mean": "ความพอดี ความสมดุล การค่อย ๆ ผสมสิ่งต่าง ๆ ให้ลงตัว การเยียวยา", "ask": "ชีวิตฉันตอนนี้ตรงไหนมากไป ตรงไหนน้อยไป"}, {"n": 15, "en": "The Devil", "th": "ปีศาจ", "tag": "โซ่หลวมกว่าที่คิด ถ้ากล้าขยับ", "img_desc": "ปีศาจมีเขานั่งบนแท่น ชายหญิงถูกล่ามโซ่ที่คอ แต่โซ่หลวมพอจะถอดออกเองได้", "mean": "สิ่งที่ผูกมัด นิสัยที่เลิกยาก ความอยากที่คุมเราอยู่ เช่น ไถโทรศัพท์อีกห้านาทีที่กลายเป็นชั่วโมง ข่าวดีคือโซ่หลวมกว่าที่คิด", "ask": "อะไรที่เป็นห่วงคล้องคอฉันไว้ในขณะนี้"}, {"n": 16, "en": "The Tower", "th": "หอคอย", "tag": "ฟ้าผ่าทีเดียว เห็นความจริงทั้งหมด", "img_desc": "ฟ้าผ่าลงหอคอยบนยอดหิน มงกุฎปลิวหลุด คนสองคนร่วงลงมา", "mean": "การเปลี่ยนแปลงกะทันหัน สิ่งที่สร้างบนฐานไม่มั่นคงพังลง ความจริงที่เผยออกมา", "ask": "สิ่งที่สูญเสียไป ทำให้ฉันตาสว่างเรื่องอะไรบ้าง"}, {"n": 17, "en": "The Star", "th": "ดวงดาว", "tag": "หลังพายุ ดาวยังอยู่ตรงนั้นเสมอ", "img_desc": "หญิงคุกเข่า เท้าข้างหนึ่งแตะน้ำ เทน้ำจากเหยือกสองใบ ใบหนึ่งลงสระ อีกใบลงดิน ใต้ดาวดวงใหญ่", "mean": "ความหวัง การเยียวยา ความสงบหลังพายุ การกลับมาเชื่อในตัวเอง", "ask": "สิ่งใดที่เยียวยาจิตใจให้ฉันกลับมามีความหวังได้อีก"}, {"n": 18, "en": "The Moon", "th": "ดวงจันทร์", "tag": "ไม่ใช่ทุกเงาจะเป็นผี", "img_desc": "พระจันทร์ส่องทางเดินระหว่างหอคอยสองหลัง หมากับหมาป่าเงยหน้าหอน และมีกุ้งตัวหนึ่งคลานขึ้นมาจากสระ", "mean": "ความไม่แน่ใจ ความกลัว ความฝัน สัญชาตญาณ ช่วงที่มองอะไรไม่ค่อยชัด", "ask": "สิ่งใดที่ฉันไม่กล้าเผชิญหน้าตรง ๆ บ้าง"}, {"n": 19, "en": "The Sun", "th": "ดวงอาทิตย์", "tag": "แดดออกเมื่อไร ใจก็สว่างตาม", "img_desc": "เด็กน้อยขี่ม้าขาวอยู่หน้ากำแพงที่มีดอกทานตะวันบาน ใต้ดวงอาทิตย์ดวงโต", "mean": "ความสุข ความชัดเจน ความสำเร็จ พลังชีวิต ความร่าเริงแบบเด็ก ๆ", "ask": "อะไรทำให้ฉันมีความสุข แบบไม่ต้องถ่ายรูปลงสตอรี่"}, {"n": 20, "en": "Judgement", "th": "การตื่นรู้", "tag": "เสียงแตรดังแล้ว ถึงเวลาลุกขึ้นใหม่", "img_desc": "ทูตสวรรค์เป่าแตร ผู้คนลุกขึ้นจากโลงพร้อมกางแขนรับ", "mean": "การตื่น การได้ยินเสียงเรียกของชีวิต การให้อภัยตัวเอง โอกาสครั้งใหม่", "ask": "ถ้าให้อภัยตัวเองในเรื่องที่ผ่านพ้นไปแล้วได้ ฉันจะเริ่มต้นเส้นทางใหม่อย่างไร"}, {"n": 21, "en": "The World", "th": "โลก", "tag": "จบรอบนี้ด้วยรอยยิ้ม แล้วเต้นต่อรอบหน้า", "img_desc": "นักเต้นลอยอยู่กลางวงกลมที่ทำจากใบไม้ มีสัตว์สี่ตัวอยู่สี่มุม", "mean": "การจบรอบอย่างสมบูรณ์ ความเต็ม ความสำเร็จ การได้เป็นตัวเองครบทุกด้าน", "ask": "ฉันภูมิใจในตัวเองเรื่องใดบ้าง"}];
+const MAJOR_FILES = ["major-00-fool.png", "major-01-magician.png", "major-02-priestess.png", "major-03-empress.png", "major-04-emperor.png", "major-05-hierophant.png", "major-06-lovers.png", "major-07-chariot.png", "major-08-strength.png", "major-09-hermit.png", "major-10-wheel.png", "major-11-justice.png", "major-12-hanged.png", "major-13-death.png", "major-14-temperance.png", "major-15-devil.png", "major-16-tower.png", "major-17-star.png", "major-18-moon.png", "major-19-sun.png", "major-20-judgement.png", "major-21-world.png"];
+
+const SUITS = {
+  Cups:      { th: "ถ้วย",   el: "น้ำ", area: "ความรู้สึก ความรัก ความสัมพันธ์", q: "ใจฉันรู้สึกอย่างไร ตอบตามจริงนะ" },
+  Swords:    { th: "ดาบ",    el: "ลม",  area: "ความคิด คำพูด ความขัดแย้ง และความคิดที่วนตอนตีหนึ่ง", q: "ฉันกำลังคิดอะไร และคิดแบบนี้ช่วยฉันไหม" },
+  Wands:     { th: "ไม้เท้า", el: "ไฟ",  area: "แรงบันดาลใจ ความอยาก การลงมือ", q: "อะไรทำให้ตาฉันเป็นประกาย" },
+  Pentacles: { th: "เหรียญ", el: "ดิน", area: "ร่างกาย เงิน งาน และสิ่งที่จับต้องได้", q: "ฉันดูแลชีวิตจริงของตัวเองดีแค่ไหน" }
+};
+const NUMS = {
+  1: "เมล็ดพันธุ์ การเริ่มต้น", 2: "ตัวเลือก การรักษาสมดุล คนสองคน", 3: "การเติบโต เพื่อน การร่วมมือ",
+  4: "การหยุดพัก ความมั่นคง บางครั้งคือการกอดของเดิมไว้แน่นเกินไป", 5: "ความไม่ราบรื่น การสูญเสีย วันที่อะไรก็ไม่เป็นใจ",
+  6: "การฟื้นตัว การให้และการรับ", 7: "การทบทวน การทดสอบ ความไม่แน่ใจ", 8: "การเคลื่อนไหว การฝึกฝน การเปลี่ยนแปลง",
+  9: "ใกล้ถึงปลายทาง ผลของสิ่งที่ทำมา", 10: "จบรอบ ความเต็ม บางครั้งก็เต็มจนล้น"
+};
+const COURTS = {
+  11: { en: "Page",   th: "เพจ",    m: "น้องใหม่ที่ตั้งใจจดทุกอย่าง ความอยากรู้ ข่าวใหม่" },
+  12: { en: "Knight", th: "อัศวิน",  m: "การพุ่งไปข้างหน้าเต็มแรง บางครั้งเร็วจนลืมถามทาง" },
+  13: { en: "Queen",  th: "ราชินี",  m: "ความเข้าใจจากข้างใน การดูแลแบบที่ไม่ต้องพูดเยอะ" },
+  14: { en: "King",   th: "ราชา",   m: "ความชำนาญ การคุมทิศทางแบบที่ไม่ต้องขึ้นเสียง" }
+};
+const SETS = ["กลับมาหาตัวเอง", "หยุดคิดวน", "แบตใกล้หมด ขอชาร์จก่อน", "อารมณ์มาเยือน", "ผิดหวังและหมดไฟ",
+              "คนรอบตัว", "บ้านและครอบครัว", "เรื่องของหัวใจ", "งานและเงิน", "ความฝันและการเริ่มใหม่"];
+const REV_NOTE = "ใบที่กลับหัวยังพูดเรื่องเดิม แต่เรื่องนั้นติดขัด ยังไม่ออกมา หรือเกิดอยู่ข้างในใจมากกว่าข้างนอก";
+
+const SPREADS = [
+  { group: "แบบทั่วไป (ภาค 3)", id: "one", name: "1 ใบ · เช็กใจวันนี้", use: "ใช้กับทุกหัวข้อในภาค 2", pos: ["ใจของฉันวันนี้"] },
+  { group: "แบบทั่วไป (ภาค 3)", id: "three", name: "3 ใบ · รู้สึก ต้องการ ทำได้", use: "อยากเข้าใจเรื่องหนึ่งให้ชัดขึ้น", pos: ["สิ่งที่ฉันรู้สึก", "สิ่งที่ฉันต้องการ", "สิ่งที่ฉันทำได้"] },
+  { group: "แบบทั่วไป (ภาค 3)", id: "choice", name: "4 ใบ · สองทางเลือก", use: "ต้องตัดสินใจระหว่างสองทาง", pos: ["ถ้าเลือกทาง ก", "ถ้าเลือกทาง ข", "สิ่งที่ฉันกลัว", "สิ่งที่ฉันต้องการจริง ๆ"] },
+  { group: "แบบทั่วไป (ภาค 3)", id: "cross", layout: "cross", name: "5 ใบ · กากบาท", use: "เรื่องที่ติดขัด อยากเห็นทั้งสิ่งที่ขวางและสิ่งที่ช่วย", pos: ["เรื่องตอนนี้", "สิ่งที่ขวาง", "สิ่งที่ช่วย", "สิ่งที่ควรรู้", "ก้าวเล็ก ๆ ต่อไป"] },
+  { group: "แบบทั่วไป (ภาค 3)", id: "celtic", layout: "celtic", name: "10 ใบ · เซลติกครอส", use: "แบบดั้งเดิมสำหรับเรื่องใหญ่ เหมาะกับคนที่อยากอ่านให้ผู้อื่น", pos: ["ตัวเรื่อง", "สิ่งที่ขวางหรือท้าทาย", "สิ่งที่ดีที่สุดที่เป็นไปได้", "รากของเรื่อง", "สิ่งที่เพิ่งผ่านไป", "สิ่งที่กำลังจะมา", "ตัวฉันในเรื่องนี้", "คนและสิ่งรอบตัว", "ความหวังและความกลัว", "ทางที่เรื่องกำลังไป"] },
+  { group: "ช่วงเจาะลึกของแต่ละชุด (ภาค 2)", id: "d1", name: "ชุด 1 · ภาพตัวฉันตอนนี้", use: "ชุดกลับมาหาตัวเอง", pos: ["ฉันที่คนอื่นเห็น", "ฉันที่ฉันเห็น", "ฉันที่ซ่อนอยู่", "ฉันที่กำลังจะเป็น"] },
+  { group: "ช่วงเจาะลึกของแต่ละชุด (ภาค 2)", id: "d2", name: "ชุด 2 · แยกความคิดออกจากความจริง", use: "ชุดหยุดคิดวน", pos: ["เรื่องที่ฉันคิดวน", "สิ่งที่เกิดขึ้นจริง", "สิ่งที่ฉันกลัวว่าจะเกิด", "สิ่งที่ช่วยให้ใจสงบ"] },
+  { group: "ช่วงเจาะลึกของแต่ละชุด (ภาค 2)", id: "d3", name: "ชุด 3 · ดูดแรง เติมแรง", use: "ชุดแบตใกล้หมด ขอชาร์จก่อน", pos: ["สิ่งที่ดูดแรงฉัน", "สิ่งที่เติมแรงฉัน", "สิ่งที่ควรหยุด", "สิ่งที่ควรเริ่ม"] },
+  { group: "ช่วงเจาะลึกของแต่ละชุด (ภาค 2)", id: "d4", name: "ชุด 4 · อารมณ์นี้อยากบอกอะไร", use: "ชุดอารมณ์มาเยือน", pos: ["อารมณ์นี้คืออะไร", "มันมาจากไหน", "มันอยากบอกอะไร", "ฉันดูแลมันได้อย่างไร"] },
+  { group: "ช่วงเจาะลึกของแต่ละชุด (ภาค 2)", id: "d5", name: "ชุด 5 · จุดไฟดวงใหม่", use: "ชุดผิดหวังและหมดไฟ", pos: ["สิ่งที่ฉันหวังไว้", "สิ่งที่เกิดขึ้นจริง", "สิ่งที่ฉันได้เรียนรู้", "สิ่งที่ยังอยู่ในมือ", "ไฟดวงเล็กที่จุดได้วันนี้"] },
+  { group: "ช่วงเจาะลึกของแต่ละชุด (ภาค 2)", id: "d6", name: "ชุด 6 · ฉันกับเขา", use: "ชุดคนรอบตัว", pos: ["ฉันในความสัมพันธ์นี้", "เขาในความสัมพันธ์นี้", "สิ่งที่อยู่ระหว่างเรา", "สิ่งที่ความสัมพันธ์นี้ต้องการ"] },
+  { group: "ช่วงเจาะลึกของแต่ละชุด (ภาค 2)", id: "d7", name: "ชุด 7 · สิ่งที่เก็บไว้ สิ่งที่วางลง", use: "ชุดบ้านและครอบครัว", pos: ["สิ่งที่ได้มาจากบ้าน", "สิ่งที่อยากเก็บไว้", "สิ่งที่อยากวางลง", "บ้านแบบที่ฉันอยากสร้าง"] },
+  { group: "ช่วงเจาะลึกของแต่ละชุด (ภาค 2)", id: "d8", name: "ชุด 8 · หัวใจ 5 ใบ", use: "ชุดเรื่องของหัวใจ", pos: ["ใจของฉันตอนนี้", "สิ่งที่ฉันให้ในความรัก", "สิ่งที่ฉันอยากได้รับ", "สิ่งที่ควรปล่อยจากความรักครั้งก่อน", "ความรักที่กำลังเติบโตในตัวฉัน"] },
+  { group: "ช่วงเจาะลึกของแต่ละชุด (ภาค 2)", id: "d9", name: "ชุด 9 · งานที่ใช่ เงินที่พอ", use: "ชุดงานและเงิน", pos: ["สิ่งที่งานตอนนี้ให้ฉัน", "สิ่งที่งานตอนนี้เอาไป", "ความสัมพันธ์ของฉันกับเงิน", "ก้าวที่ทำได้ในเดือนนี้"] },
+  { group: "ช่วงเจาะลึกของแต่ละชุด (ภาค 2)", id: "d10", name: "ชุด 10 · จากฝันถึงก้าวแรก", use: "ชุดความฝันและการเริ่มใหม่", pos: ["ความฝัน", "สิ่งที่ฉันมีอยู่แล้ว", "สิ่งที่ยังขาด", "สิ่งที่ขวางทาง", "ก้าวแรก"] },
+  { group: "ตัวช่วย", id: "pickset", name: "ให้ไพ่เลือกชุดให้ (1 ใบ)", use: "เลขบนไพ่ชุดเล็กคือเลขชุดในภาค 2", pos: ["ชุดที่ไพ่เลือกให้"] }
+];
+
+/* the full deck · ภาพไพ่สำรับของ Dan (AI · 420×720) โฮสต์ที่ artproducktion.com — ชื่อไฟล์ตาม ไพ่ชุดใหม่/ออนไลน์/README.md · เปลี่ยน 6 ต.ค. 2569 (เดิมภาพ 1909 ในโฟลเดอร์ cards/) */
+const CARD_BASE = "https://artproducktion.com/cards/";
+const NUM_WORDS = { 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten" };
+const DECK = [];
+MAJORS.forEach((m, i) => DECK.push({ kind: "major", n: m.n, file: MAJOR_FILES[i], en: m.en, th: m.th, data: m }));
+Object.keys(SUITS).forEach(s => {
+  for (let n = 1; n <= 14; n++) {
+    const court = COURTS[n];
+    const file = s.toLowerCase() + "-" + String(n).padStart(2, "0") + "-" + (n === 1 ? "ace" : court ? court.en.toLowerCase() : NUM_WORDS[n]) + ".png";
+    const en = (n === 1 ? "Ace" : court ? court.en : String(n)) + " of " + s;
+    const th = (n === 1 ? "เอซ" : court ? court.th : String(n) + " ") + SUITS[s].th;
+    DECK.push({ kind: "minor", suit: s, n, file, en, th });
+  }
+});
+
+/* helpers */
+const $ = id => document.getElementById(id);
+function rand(max) { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] % max; }
+function shuffled(arr) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rand(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function esc(t) { return String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+let state = { order: [], reversed: [], picks: [], opened: new Set(), shuffled: false };
+
+/* spread menu */
+(function buildMenu() {
+  const sel = $("spread"); let og = null, last = "";
+  SPREADS.forEach(sp => {
+    if (sp.group !== last) { og = document.createElement("optgroup"); og.label = sp.group; sel.appendChild(og); last = sp.group; }
+    const o = document.createElement("option"); o.value = sp.id; o.textContent = sp.name; og.appendChild(o);
+  });
+  try { const r = localStorage.getItem("tarot-rev"); if (r === "1" || r === "0") setRev(r === "1", true); } catch (e) {}
+})();
+function spread() { return SPREADS.find(s => s.id === $("spread").value); }
+function showInfo() {
+  const sp = spread();
+  $("spreadInfo").innerHTML = "<b>" + esc(sp.name) + "</b> · " + esc(sp.use) + " · ต้องใช้ไพ่ " + sp.pos.length + " ใบ";
+}
+
+/* ไพ่กลับหัว: ต้องเลือกก่อนสับ (Dan 6 ต.ค. 2569) · ทิศของทุกใบถูกสุ่มตอนสับ เปลี่ยนใจหลังสับ = สับใหม่ · จำตัวเลือกล่าสุดไว้ในเครื่อง */
+function revChosen() { return $("revYes").getAttribute("aria-pressed") === "true" || $("revNo").getAttribute("aria-pressed") === "true"; }
+const ASK_REV = "เลือกข้อ 2 ก่อนว่าจะใช้ไพ่กลับหัวไหม แล้วค่อยสับไพ่";
+function setRev(on, quiet) {
+  $("rev").checked = on;
+  $("revYes").setAttribute("aria-pressed", on ? "true" : "false");
+  $("revNo").setAttribute("aria-pressed", on ? "false" : "true");
+  $("shuffle").disabled = false;
+  try { localStorage.setItem("tarot-rev", on ? "1" : "0"); } catch (e) {}
+  if (quiet) return;
+  if (state.shuffled) { reset(); $("status").textContent = "เปลี่ยนเรื่องไพ่กลับหัวแล้ว สับไพ่ใหม่อีกครั้ง"; }
+  else $("status").textContent = "ยังไม่ได้สับไพ่";
+}
+
+function reset(keepMsg) {
+  state = { order: [], reversed: [], picks: [], opened: new Set(), shuffled: false };
+  $("deck").hidden = true; $("deck").innerHTML = "";
+  $("readingPanel").hidden = true; $("slots").innerHTML = ""; $("detail").hidden = true;
+  $("auto").disabled = true;
+  if (!keepMsg) $("status").textContent = revChosen() ? "ยังไม่ได้สับไพ่" : ASK_REV;
+}
+
+function doShuffle() {
+  if (!revChosen()) { $("status").textContent = ASK_REV; return; }
+  reset(true);
+  const useRev = $("rev").checked;
+  state.order = shuffled(DECK.map((_, i) => i));
+  state.reversed = state.order.map(() => useRev && rand(2) === 1);
+  state.shuffled = true;
+  const deck = $("deck"); deck.hidden = false;
+  state.order.forEach((_, k) => {
+    const b = document.createElement("button");
+    b.className = "back"; b.type = "button"; b.setAttribute("aria-pressed", "false");
+    b.setAttribute("aria-label", "ไพ่คว่ำใบที่ " + (k + 1));
+    b.addEventListener("click", () => pick(k, b));
+    deck.appendChild(b);
+  });
+  deck.classList.remove("shuffling"); void deck.offsetWidth; deck.classList.add("shuffling");
+  $("auto").disabled = false;
+  updateStatus();
+}
+
+function updateStatus() {
+  const need = spread().pos.length, got = state.picks.length;
+  $("status").innerHTML = got < need
+    ? "สับแล้ว ตั้งคำถามในใจ แล้วแตะเลือกไพ่ <b>" + need + "</b> ใบ · เลือกแล้ว <b>" + got + "</b> ใบ"
+    : "เลือกครบแล้ว เลื่อนลงไปเปิดไพ่ได้เลย";
+}
+
+function pick(k, btn) {
+  const need = spread().pos.length;
+  if (state.picks.length >= need || state.picks.includes(k)) return;
+  state.picks.push(k);
+  btn.setAttribute("aria-pressed", "true");
+  btn.innerHTML = '<span class="pick-no">' + state.picks.length + "</span>";
+  updateStatus();
+  if (state.picks.length === need) layout();
+}
+
+function autoPick() {
+  const need = spread().pos.length; const buttons = $("deck").children;
+  while (state.picks.length < need) {
+    const k = rand(state.order.length);
+    if (!state.picks.includes(k)) pick(k, buttons[k]);
+  }
+}
+
+function cardAt(k) { return { card: DECK[state.order[k]], rev: state.reversed[k] }; }
+
+function layout() {
+  const sp = spread(); const slots = $("slots");
+  slots.className = "slots" + (sp.layout ? " " + sp.layout : "");
+  slots.innerHTML = "";
+  state.picks.forEach((k, i) => {
+    const { card, rev } = cardAt(k);
+    const d = document.createElement("div"); d.className = "slot";
+    d.innerHTML =
+      '<p class="pos"><b>' + (i + 1) + ".</b> " + esc(sp.pos[i]) + "</p>" +
+      '<button class="flip" type="button" aria-label="เปิดไพ่ตำแหน่ง ' + (i + 1) + '">' +
+        '<span class="inner"><span class="backface"></span>' +
+        '<span class="face' + (rev ? " rev" : "") + '"><img src="' + CARD_BASE + card.file + '" alt="' + esc(card.en) + '" loading="lazy"></span></span>' +
+      "</button>" +
+      '<p class="nm" hidden>' + esc(card.en) + (rev ? ' <span class="badge">กลับหัว</span>' : "") + "<small>" + esc(card.th) + "</small></p>";
+    d.querySelector(".flip").addEventListener("click", () => openCard(i, d));
+    slots.appendChild(d);
+  });
+  $("readingPanel").hidden = false;
+  $("readingPanel").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+}
+
+function openCard(i, slotEl) {
+  const fl = slotEl.querySelector(".flip");
+  if (!fl.classList.contains("open")) { fl.classList.add("open"); slotEl.querySelector(".nm").hidden = false; state.opened.add(i); }
+  showDetail(i);
+}
+
+function showDetail(i) {
+  const sp = spread(); const { card, rev } = cardAt(state.picks[i]);
+  let h = '<p class="sub">ตำแหน่งที่ ' + (i + 1) + " · " + esc(sp.pos[i]) + "</p>";
+  h += "<h3>" + esc(card.en) + (rev ? ' <span class="badge">กลับหัว</span>' : "") + "</h3>";
+  if (card.kind === "major") {
+    const m = card.data;
+    h += '<p class="sub">ไพ่ชุดใหญ่ ใบที่ ' + m.n + " · " + esc(m.th) + " · " + stageOf(m.n) + "</p>";
+    h += '<p class="tag">' + esc(m.tag) + "</p>";
+    h += row("ในภาพ", esc(m.img_desc)) + row("ความหมาย", esc(m.mean)) + row("ถามตัวเอง", '<span class="ask">' + esc(m.ask) + "</span>");
+  } else {
+    const s = SUITS[card.suit]; const court = COURTS[card.n];
+    h += '<p class="sub">ไพ่ชุดเล็ก · ชุด' + s.th + " (ธาตุ" + s.el + ")</p>";
+    h += row("ชุด" + s.th, esc(s.area));
+    h += court ? row(court.th, esc(court.m)) : row("เลข " + (card.n === 1 ? "เอซ" : card.n), esc(NUMS[card.n]));
+    h += row("ถามตัวเอง", '<span class="ask">' + esc(s.q) + "</span>");
+    h += '<p class="note">ลองอ่านจากภาพก่อนตาม 4 ขั้นในบทที่ 4 แล้วค่อยเอาความหมายของชุดกับ' + (court ? "ไพ่บุคคล" : "เลข") + "มาต่อกัน (สูตรในบทที่ 2)</p>";
+  }
+  if (rev) h += '<p class="note">' + REV_NOTE + "</p>";
+  if (sp.id === "pickset") {
+    if (card.kind === "minor" && card.n <= 10) h += '<p class="pickset">ไพ่เลือกชุดที่ ' + card.n + " · " + SETS[card.n - 1] + "</p>";
+    else h += '<p class="pickset">ได้' + (card.kind === "major" ? "ไพ่ชุดใหญ่" : "ไพ่บุคคล") + " วันนี้เลือกชุดเองตามใจได้เลย</p>";
+  }
+  const det = $("detail"); det.innerHTML = h; det.hidden = false;
+}
+function row(k, v) { return '<div class="row"><span class="k">' + k + "</span><span>" + v + "</span></div>"; }
+function stageOf(n) { return n === 0 ? "จุดเริ่มต้นของการเดินทาง" : n <= 7 ? "ช่วงที่ 1 · โลกข้างนอก" : n <= 14 ? "ช่วงที่ 2 · โลกข้างใน" : "ช่วงที่ 3 · การเปลี่ยนแปลงลึก ๆ"; }
+
+/* ── โหมดบันทึกไพ่ที่เปิดเอง (Dan 6 ต.ค. 2569: 2B · 1A พิมพ์ค้นชื่อ · 2A ปุ่มคัดลอกบันทึก) ──
+   ผู้อ่านเปิดไพ่จากสำรับของตัวเอง แล้วใส่ไพ่ทีละตำแหน่ง ติ๊กกลับหัวได้เป็นใบ · ใช้หน้าแสดงไพ่ + ความหมายชุดเดียวกับโหมดเปิดไพ่
+   ไม่เก็บข้อมูลที่ไหน นอกจากข้อความที่ผู้อ่านกดคัดลอกเอง */
+let mode = "draw";
+let log = { cards: [], rev: [] };   // ต่อตำแหน่ง: index ใน DECK หรือ null · กลับหัว true/false
+function setMode(m) {
+  mode = m;
+  $("modeDraw").setAttribute("aria-pressed", m === "draw" ? "true" : "false");
+  $("modeLog").setAttribute("aria-pressed", m === "log" ? "true" : "false");
+  document.querySelectorAll(".drawonly").forEach(el => { el.hidden = m !== "draw"; });
+  $("logPanel").hidden = m !== "log";
+  $("openAll").hidden = m === "log";
+  $("s3").textContent = m === "log" ? "3 · ไพ่ที่บันทึก · แตะใบไหนก็ได้เพื่ออ่านความหมาย" : "4 · แตะไพ่ทีละใบเพื่อเปิด";
+  reset();
+  if (m === "log") buildLog();
+}
+function searchCards(qs) {
+  const toks = qs.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  if (!toks.length) return [];
+  const out = [];
+  DECK.forEach((c, ix) => {
+    const hay = (c.en + " " + c.th + (c.kind === "major" ? " major ชุดใหญ่" : " " + c.suit + " " + SUITS[c.suit].th)).toLowerCase();
+    if (toks.every(t => hay.includes(t))) out.push(ix);
+  });
+  return out.slice(0, 8);
+}
+function buildLog() {
+  const sp = spread();
+  log = { cards: sp.pos.map(() => null), rev: sp.pos.map(() => false) };
+  const box = $("logRows"); box.innerHTML = "";
+  sp.pos.forEach((p, i) => {
+    const d = document.createElement("div"); d.className = "logrow";
+    d.innerHTML = '<p class="pos"><b>' + (i + 1) + ".</b> " + esc(p) + "</p>" +
+      '<div class="logpick"><input type="text" class="logq" placeholder="พิมพ์ชื่อไพ่ เช่น moon, ถ้วย 3" autocomplete="off" aria-label="ไพ่ตำแหน่งที่ ' + (i + 1) + '">' +
+      '<button class="btn choice logrev" type="button" aria-pressed="false">กลับหัว</button></div>' +
+      '<div class="logres" hidden></div><p class="logsel">ยังไม่ได้เลือก</p>';
+    const q = d.querySelector(".logq"), res = d.querySelector(".logres");
+    q.addEventListener("input", () => {
+      if (!q.value.trim()) { res.hidden = true; return; }
+      const hits = searchCards(q.value);
+      res.innerHTML = hits.length
+        ? hits.map(ix => '<button type="button" data-ix="' + ix + '">' + esc(DECK[ix].en) + "<small>" + esc(DECK[ix].th) + "</small></button>").join("")
+        : '<p class="hint">ไม่พบไพ่ชื่อนี้ ลองพิมพ์ภาษาอังกฤษ เช่น cups, sun หรือชื่อไทย เช่น ดาบ 3</p>';
+      res.hidden = false;
+      res.querySelectorAll("button").forEach(b => b.addEventListener("click", () => chooseLog(i, +b.dataset.ix, d)));
+    });
+    q.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); const f = res.querySelector("button"); if (f && !res.hidden) f.click(); } });
+    d.querySelector(".logrev").addEventListener("click", ev => { log.rev[i] = !log.rev[i]; ev.currentTarget.setAttribute("aria-pressed", log.rev[i] ? "true" : "false"); updateLog(); });
+    box.appendChild(d);
+  });
+  updateLog();
+}
+function chooseLog(i, ix, rowEl) {
+  const dup = log.cards.indexOf(ix);
+  const sel = rowEl.querySelector(".logsel"), res = rowEl.querySelector(".logres"), q = rowEl.querySelector(".logq");
+  if (dup > -1 && dup !== i) { sel.innerHTML = "<b>" + esc(DECK[ix].en) + "</b> ใช้ไปแล้วในตำแหน่งที่ " + (dup + 1) + " เลือกใบอื่น"; return; }
+  log.cards[i] = ix; q.value = DECK[ix].en; res.hidden = true;
+  updateLog();
+}
+function updateLog() {
+  [...$("logRows").children].forEach((d, i) => {
+    const ix = log.cards[i], sel = d.querySelector(".logsel");
+    if (ix == null) { sel.textContent = "ยังไม่ได้เลือก"; return; }
+    sel.innerHTML = '<img class="logthumb" src="' + CARD_BASE + DECK[ix].file + '" alt="" loading="lazy"' + (log.rev[i] ? ' style="transform:rotate(180deg)"' : "") + "><b>" +
+      esc(DECK[ix].en) + "</b> " + esc(DECK[ix].th) + (log.rev[i] ? ' <span class="badge">กลับหัว</span>' : "");
+  });
+  const filled = log.cards.filter(x => x != null).length, need = log.cards.length;
+  $("showLog").disabled = filled < need; $("copyLog").disabled = filled < need;
+  $("logStatus").innerHTML = filled < need ? "ใส่แล้ว <b>" + filled + "</b> จาก <b>" + need + "</b> ใบ" : "ครบแล้ว กด \"ดูไพ่และความหมาย\" หรือ \"คัดลอกบันทึก\"";
+}
+function showLog() {
+  if (log.cards.some(x => x == null)) return;
+  state = { order: log.cards.slice(), reversed: log.rev.slice(), picks: log.cards.map((_, k) => k), opened: new Set(), shuffled: false };
+  layout();
+  [...$("slots").children].forEach((el, i) => openCard(i, el)); showDetail(0);
+}
+function logText() {
+  const sp = spread();
+  const date = new Date().toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "numeric" });
+  const lines = ["บันทึกไพ่ · " + date + " · " + sp.name];
+  sp.pos.forEach((p, i) => { const c = DECK[log.cards[i]]; lines.push((i + 1) + ". " + p + " — " + c.en + " (" + c.th + ")" + (log.rev[i] ? " กลับหัว" : "")); });
+  lines.push("", "จากโต๊ะเปิดไพ่ · เปิดไพ่ ฟังใจ");
+  return lines.join("\n");
+}
+function copyLog() {
+  const t = logText();
+  const done = () => { $("logStatus").textContent = "คัดลอกบันทึกแล้ว วางในแอปโน้ตได้เลย"; };
+  const fallback = () => {
+    const ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); done(); } catch (e) { $("logStatus").textContent = "คัดลอกไม่ได้ในเบราว์เซอร์นี้ ลองกดค้างที่ชื่อไพ่แล้วคัดลอกเอง"; }
+    ta.remove();
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, fallback); else fallback();
+}
+$("modeDraw").addEventListener("click", () => setMode("draw"));
+$("modeLog").addEventListener("click", () => setMode("log"));
+$("showLog").addEventListener("click", showLog);
+$("copyLog").addEventListener("click", copyLog);
+$("clearLog").addEventListener("click", buildLog);
+
+$("spread").addEventListener("change", () => { showInfo(); if (mode === "log") { reset(); buildLog(); } else if (state.shuffled) { reset(); } });
+$("revNo").addEventListener("click", () => setRev(false));
+$("revYes").addEventListener("click", () => setRev(true));
+$("shuffle").addEventListener("click", doShuffle);
+$("auto").addEventListener("click", autoPick);
+$("reset").addEventListener("click", () => reset());
+$("openAll").addEventListener("click", () => { [...$("slots").children].forEach((el, i) => openCard(i, el)); showDetail(0); });
+$("shuffle").disabled = !revChosen();
+if (!revChosen()) $("status").textContent = ASK_REV;
+showInfo();
+</script>
