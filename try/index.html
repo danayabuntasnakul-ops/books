@@ -47,6 +47,9 @@
   .until { justify-self: start; font-size: 13px; font-weight: 600; color: var(--plum); background: var(--plum-tint); border-radius: 99px; padding: 2px 12px; }
   .pages { display: grid; gap: 16px; }
   .pages img { width: 100%; height: auto; display: block; border-radius: 4px; box-shadow: var(--shadow); background: #fff; }
+  /* หน้า 2: ลิงก์ทับ QR ในภาพ (ภาพเขียนว่า "แตะที่ QR ได้เลย") · ตำแหน่งจากลิงก์ใน PDF ตัวอย่าง (303.8, 288.8)–(366, 351) บนหน้า 420×595 pt */
+  .pages .pg { position: relative; }
+  .pages .qrhit { position: absolute; left: 71.5%; top: 48%; width: 16.3%; height: 11.5%; border-radius: 4px; }
   .pages .go { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
   .btn { display: inline-block; text-decoration: none; font: inherit; font-size: 15px; font-weight: 600; border-radius: 99px; padding: 10px 20px; border: 1px solid var(--sage); color: var(--sage); background: transparent; cursor: pointer; }
   .btn.solid { background: var(--sage); color: var(--on-sage); }
@@ -130,7 +133,12 @@
       img.src = "pages/p" + (i + 1) + ".jpg";
       img.alt = alt; img.width = 1008; img.height = 1428;
       img.loading = i < 2 ? "eager" : "lazy";
-      box.appendChild(img);
+      if (i === 1) {
+        var pg = document.createElement("div"); pg.className = "pg"; pg.appendChild(img);
+        var hit = document.createElement("a"); hit.className = "qrhit"; hit.href = "/try/draw/";
+        hit.target = "_blank"; hit.rel = "noopener"; hit.setAttribute("aria-label", "เปิดโต๊ะเปิดไพ่ออนไลน์");
+        pg.appendChild(hit); box.appendChild(pg);
+      } else box.appendChild(img);
       if (i === 1) box.appendChild(go([["เปิดโต๊ะเปิดไพ่ออนไลน์", "/try/draw/", false]]));
       if (i === 8) box.appendChild(go([["ดูหน้าหนังสือ", "/?src=sample", true]]));
     });
