@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>ทดลองอ่าน · เปิดไพ่ ฟังใจ</title>
+<!-- ทดลองอ่านสำหรับเพื่อน Dan (10 ต.ค. 2569) · หมดอายุ 31 ต.ค. 2569 23:59 น. · ไม่มีลิงก์จากหน้าอื่น
+     ภาพหน้า = pages/p1–p9.jpg จาก ebook-tarot-journal/pdf/เปิดไพ่-ฟังใจ-ตัวอย่างฟรี-ชุด2.pdf
+     ความเห็นส่ง Formspree ฟอร์มเดียวกับตะกร้าภาพวาด (meewodjb) แยกด้วยหัวเรื่อง
+     1 พ.ย. 2569: ลบโฟลเดอร์ pages/ ออกจาก repo เพื่อปิดจริง (หน้านี้ปิดเองด้วยวันที่อยู่แล้ว) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Trirong:ital,wght@0,300;0,400;1,400&family=IBM+Plex+Sans+Thai+Looped:wght@400;600&display=swap">
+<style>
+  :root {
+    --ground: #E9ECE6; --paper: #F8F9F5; --ink: #27302B; --muted: #5C6861; --line: #CBD3C8;
+    --sage: #56775F; --sage-tint: #E2EAE1; --plum: #74536C; --plum-tint: #F1E9EF; --on-sage: #FFFFFF;
+    --shadow: 0 1px 2px rgba(39,48,43,.06), 0 8px 24px rgba(39,48,43,.10);
+    --display: "Trirong", "Noto Serif Thai", Georgia, serif;
+    --body: "IBM Plex Sans Thai Looped", "Noto Sans Thai Looped", "Sukhumvit Set", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #141815; --paper: #1D231F; --ink: #E3E8E0; --muted: #A2ADA5; --line: #3A443D;
+      --sage: #94B79D; --sage-tint: #25302A; --plum: #CFA9C7; --plum-tint: #2E2430; --on-sage: #141815;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #141815; --paper: #1D231F; --ink: #E3E8E0; --muted: #A2ADA5; --line: #3A443D;
+    --sage: #94B79D; --sage-tint: #25302A; --plum: #CFA9C7; --plum-tint: #2E2430; --on-sage: #141815;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.4);
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { background: var(--ground); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.7; padding: 24px 16px 56px; margin: 0; }
+  .wrap { max-width: 640px; margin-inline: auto; display: grid; gap: 22px; }
+  h1, h2 { font-family: var(--display); font-weight: 400; margin: 0; line-height: 1.3; text-wrap: balance; }
+  p { margin: 0; }
+  :focus-visible { outline: 2px solid var(--plum); outline-offset: 3px; }
+  header { display: grid; gap: 6px; }
+  header h1 { font-size: clamp(30px, 7vw, 42px); font-weight: 300; color: var(--sage); }
+  header p { color: var(--muted); }
+  .until { justify-self: start; font-size: 13px; font-weight: 600; color: var(--plum); background: var(--plum-tint); border-radius: 99px; padding: 2px 12px; }
+  .pages { display: grid; gap: 16px; }
+  .pages img { width: 100%; height: auto; display: block; border-radius: 4px; box-shadow: var(--shadow); background: #fff; }
+  .pages .go { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .btn { display: inline-block; text-decoration: none; font: inherit; font-size: 15px; font-weight: 600; border-radius: 99px; padding: 10px 20px; border: 1px solid var(--sage); color: var(--sage); background: transparent; cursor: pointer; }
+  .btn.solid { background: var(--sage); color: var(--on-sage); }
+  .panel { background: var(--paper); box-shadow: var(--shadow); border-radius: 6px; padding: 20px clamp(16px, 4vw, 26px); display: grid; gap: 14px; }
+  .panel h2 { font-size: 24px; color: var(--sage); }
+  .muted { color: var(--muted); font-size: 14px; }
+  label.f { display: grid; gap: 6px; font-size: 14.5px; font-weight: 600; }
+  label.f span { font-weight: 400; color: var(--muted); }
+  input[type=text], textarea { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: var(--ground); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
+  textarea { min-height: 96px; resize: vertical; }
+  fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 6px; }
+  legend { font-size: 14.5px; font-weight: 600; padding: 0; margin-bottom: 6px; }
+  legend span { font-weight: 400; color: var(--muted); }
+  .opt { display: flex; gap: 10px; align-items: center; font-size: 15px; }
+  .opt input { width: 18px; height: 18px; accent-color: var(--plum); flex: none; }
+  .ended { text-align: center; justify-items: center; }
+  footer { font-size: 13px; color: var(--muted); display: grid; gap: 4px; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <h1>ทดลองอ่าน เปิดไพ่ ฟังใจ</h1>
+    <p>ตัวอย่างฟรี ชุด 2 หยุดคิดวน · 9 หน้า · บนมือถือถ่างนิ้วเพื่อซูมได้ครับ</p>
+    <p class="until" id="until">เปิดให้อ่านถึง 31 ต.ค. 2569</p>
+  </header>
+
+  <section class="pages" id="pages" aria-label="หน้าตัวอย่าง"></section>
+
+  <section class="panel" id="feedback" hidden aria-labelledby="fbh">
+    <h2 id="fbh">อ่านแล้วรู้สึกอย่างไร บอกผมหน่อยครับ</h2>
+    <p class="muted">ตอบแค่ข้อที่อยากตอบก็พอครับ ความเห็นส่งถึงอีเมลผมคนเดียว ผมจะใช้ปรับหนังสือก่อนเปิดขาย</p>
+    <form action="https://formspree.io/f/meewodjb" method="POST">
+      <input type="hidden" name="_subject" value="ความเห็นทดลองอ่าน เปิดไพ่ ฟังใจ">
+      <input type="hidden" name="หน้า" value="books.artproducktion.com/try">
+      <div class="panel" style="box-shadow:none;padding:0;background:transparent">
+        <label class="f">ชื่อเล่น <span>(ไม่ใส่ก็ได้)</span>
+          <input type="text" name="ชื่อเล่น" autocomplete="nickname" maxlength="60">
+        </label>
+        <label class="f">ชอบตรงไหนที่สุด
+          <textarea name="ชอบตรงไหน" maxlength="2000"></textarea>
+        </label>
+        <label class="f">ตรงไหนอ่านแล้วสะดุด งง หรืออยากให้เปลี่ยน
+          <textarea name="สะดุดตรงไหน" maxlength="2000"></textarea>
+        </label>
+        <fieldset>
+          <legend>ถ้าเล่มเต็มราคา 199 บาท (50 เล่มแรก 169 บาท) คุณจะซื้อไหม <span>(ไม่ตอบก็ได้)</span></legend>
+          <label class="opt"><input type="radio" name="จะซื้อไหม" value="ซื้อแน่"> ซื้อแน่</label>
+          <label class="opt"><input type="radio" name="จะซื้อไหม" value="อาจจะ"> อาจจะ</label>
+          <label class="opt"><input type="radio" name="จะซื้อไหม" value="ยังไม่ซื้อ"> ยังไม่ซื้อ</label>
+        </fieldset>
+        <label class="opt"><input type="checkbox" name="ยกคำพูดได้" value="ได้ ใช้ชื่อเล่น"> ผมขอยกคำพูดของคุณไปใส่ในหน้าขายได้ไหมครับ (ใช้แค่ชื่อเล่น)</label>
+        <p><button class="btn solid" type="submit">ส่งความเห็น</button></p>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel ended" id="ended" hidden>
+    <h2>ช่วงทดลองอ่านจบแล้วครับ</h2>
+    <p>ขอบคุณที่แวะมานะครับ เล่มเต็ม เปิดไพ่ ฟังใจ ดูรายละเอียดได้ที่หน้าหนังสือ</p>
+    <p><a class="btn solid" href="/?src=sample">ไปหน้าหนังสือ</a></p>
+  </section>
+
+  <footer>
+    <p>เขียนโดย ดินแดน (Din Dan) · จัดพิมพ์โดย ArtproDucktion</p>
+    <p>ภาพไพ่: Dan Tarot โดย ArtproDucktion · ภาพสร้างด้วย AI กำกับองค์ประกอบโดย Dan</p>
+    <p>ถ้าช่วงนี้ใจหนักจนดูแลตัวเองไม่ไหว โทรสายด่วนสุขภาพจิต 1323 ได้ตลอด 24 ชั่วโมง</p>
+  </footer>
+</main>
+<script>
+  // หมดอายุสิ้นวัน 31 ต.ค. 2569 เวลาไทย · ก่อนหมดเวลาค่อยใส่ภาพ (หลังหมดเวลาไม่โหลดภาพเลย)
+  var END = new Date("2026-10-31T23:59:59+07:00").getTime();
+  var ALT = ["ปก ตัวอย่างฟรี ชุด 2 หยุดคิดวน", "วิธีใช้ตัวอย่าง", "ชุด 2 หน้า 1", "ชุด 2 หน้า 2", "ชุด 2 หน้า 3",
+             "ชุด 2 หน้า 4", "ชุด 2 ช่วงเจาะลึก", "ชุด 2 ปิดชุด", "ในเล่มเต็มมีอะไร"];
+  if (Date.now() > END) {
+    document.getElementById("ended").hidden = false;
+    document.getElementById("until").hidden = true;
+  } else {
+    var box = document.getElementById("pages");
+    ALT.forEach(function (alt, i) {
+      var img = document.createElement("img");
+      img.src = "pages/p" + (i + 1) + ".jpg";
+      img.alt = alt; img.width = 1008; img.height = 1428;
+      img.loading = i < 2 ? "eager" : "lazy";
+      box.appendChild(img);
+      if (i === 1) box.appendChild(go([["เปิดโต๊ะเปิดไพ่ออนไลน์", "/draw/?src=sample", false]]));
+      if (i === 8) box.appendChild(go([["ดูหน้าหนังสือ", "/?src=sample", true]]));
+    });
+    document.getElementById("feedback").hidden = false;
+  }
+  function go(items) {
+    var d = document.createElement("div"); d.className = "go";
+    items.forEach(function (it) {
+      var a = document.createElement("a"); a.className = "btn" + (it[2] ? " solid" : "");
+      a.href = it[1]; a.textContent = it[0]; a.target = "_blank"; a.rel = "noopener"; d.appendChild(a);
+    });
+    return d;
+  }
+</script>
+</body>
+</html>
