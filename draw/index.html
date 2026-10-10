@@ -134,6 +134,18 @@
   .detail .note { font-size: 14px; color: var(--muted); background: var(--sage-tint); border-radius: 6px; padding: 10px 12px; }
   .pickset { font-family: var(--display); font-size: 20px; color: var(--sage); }
 
+  /* หัวข้อของชุดฮีลใจ (Dan 10 ต.ค. 2569: แบบ B) · เลือกชุดแล้วแตะหัวข้อ · คำถามขึ้นในกรอบม่วง */
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (min-width: 720px) { .tiles { grid-template-columns: repeat(4, 1fr); } }
+  .tile { font: inherit; text-align: left; cursor: pointer; color: var(--ink); border: 1px solid var(--line); border-radius: 8px;
+          padding: 8px 10px; background: var(--ground); display: grid; gap: 1px; align-content: start; font-size: 14px; line-height: 1.45; }
+  .tile b { color: var(--sage); font-size: 13px; font-weight: 600; }
+  .tile small { color: var(--muted); font-size: 12px; }
+  .tile[aria-pressed="true"] { border: 2px solid var(--sage); background: var(--sage-tint); padding: 7px 9px; }
+  .qcard { background: var(--plum-tint); border-radius: 8px; padding: 12px 14px; display: grid; gap: 4px; }
+  .qcard .k { font-size: 12.5px; font-weight: 600; color: var(--plum); letter-spacing: .02em; }
+  .qcard .q { font-family: var(--display); font-size: 19px; line-height: 1.5; }
+
   footer { font-size: 13px; color: var(--muted); display: grid; gap: 4px; }
   a.book { color: var(--sage); font-weight: 600; text-underline-offset: 3px; }
 </style>
@@ -155,12 +167,13 @@
   </section>
 
   <section class="panel" aria-labelledby="s1">
-    <p class="step" id="s1">1 · เลือกแบบการวางไพ่</p>
+    <p class="step" id="s1">1 · เลือกชุด แล้วเลือกหัวข้อ</p>
     <div class="controls">
-      <label class="field" for="spread">แบบการวางไพ่
+      <label class="field" for="spread">ชุดฮีลใจ หรือแบบการวางไพ่ทั่วไป
         <select id="spread"></select>
       </label>
     </div>
+    <div class="tiles" id="topics" role="group" aria-label="หัวข้อในชุดนี้" hidden></div>
     <p class="spread-info" id="spreadInfo"></p>
   </section>
 
@@ -178,6 +191,7 @@
   <!-- โหมดบันทึกไพ่ที่เปิดเอง -->
   <section class="panel" id="logPanel" hidden aria-labelledby="sL">
     <p class="step" id="sL">2 · ใส่ไพ่ที่เปิดได้ทีละตำแหน่ง · ใบไหนกลับหัว แตะปุ่ม "กลับหัว"</p>
+    <div class="qcard" hidden><p class="k"></p><p class="q"></p></div>
     <div id="logRows"></div>
     <div class="actions">
       <button class="btn primary" id="showLog" type="button" disabled>ดูไพ่และความหมาย</button>
@@ -189,6 +203,7 @@
 
   <section class="panel drawonly" aria-labelledby="s2">
     <p class="step" id="s2">3 · ตั้งคำถามในใจ แล้วสับไพ่</p>
+    <div class="qcard" hidden><p class="k"></p><p class="q"></p></div>
     <div class="actions">
       <button class="btn primary" id="shuffle" type="button">สับไพ่</button>
       <button class="btn secondary" id="auto" type="button" disabled>ให้ระบบหยิบให้</button>
@@ -238,6 +253,39 @@ const COURTS = {
 };
 const SETS = ["กลับมาหาตัวเอง", "หยุดคิดวน", "แบตใกล้หมด ขอชาร์จก่อน", "อารมณ์มาเยือน", "ผิดหวังและหมดไฟ",
               "คนรอบตัว", "บ้านและครอบครัว", "เรื่องของหัวใจ", "งานและเงิน", "ความฝันและการเริ่มใหม่"];
+/* คำถามหัวข้อ x.1–x.3 ของภาค 2 ตรงกับเล่ม v15 (หัวข้อ · ชื่อ · คำถามตอนเปิดไพ่) · แก้ในเล่มต้องแก้ตรงนี้ด้วย */
+const TOPICS = [
+  ["1.1", "ทักทายไพ่ ทักทายตัวเอง", "วันนี้ ฉันควรใส่ใจเรื่องไหนในตัวเอง"],
+  ["1.2", "ไพ่ใบนี้เหมือนฉันตรงไหน", "ถ้าไพ่ใบนี้เป็นภาพของฉันในวันนี้ มันกำลังเล่าอะไรเกี่ยวกับฉัน"],
+  ["1.3", "ของดีที่ฉันลืมไปว่ามี", "จุดแข็งอะไรในตัวฉันที่ฉันมักมองข้าม"],
+  ["2.1", "เสียงในหัวที่ชอบติ", "เสียงในหัวที่ชอบติฉัน วันนี้พูดว่าอะไร"],
+  ["2.2", "ความกังวลที่วนในหัว", "ความกังวลเรื่องไหนที่วนอยู่ในหัวฉันบ่อยที่สุดตอนนี้"],
+  ["2.3", "ใจดีกับตัวเองในวันที่แย่", "วันนี้ ฉันจะใจดีกับตัวเองได้อย่างไร"],
+  ["3.1", "ดูแลร่างกายวันนี้", "วันนี้ ฉันดูแลร่างกายตัวเองแบบไหน และอยากดูแลเพิ่มตรงไหน"],
+  ["3.2", "แรงขึ้น แรงลง", "ช่วงไหนของวันที่ฉันมีแรงที่สุด และอะไรที่ดูดแรงฉันไป"],
+  ["3.3", "พักแบบที่ได้พักจริง", "การพักแบบไหนที่ทำให้ฉันกลับมามีแรงจริง ๆ"],
+  ["4.1", "อารมณ์ที่แวะมาบ่อย", "อารมณ์ไหนแวะมาหาฉันบ่อยที่สุดช่วงนี้ และมันอยากบอกอะไร"],
+  ["4.2", "เรื่องที่ทำให้หงุดหงิด", "เรื่องไหนทำให้ฉันหงุดหงิดง่าย และมันไปแตะเรื่องอะไรในใจ"],
+  ["4.3", "ความเศร้าที่รอการดูแล", "ความเศร้าเรื่องไหนที่ยังรอให้ฉันดูแลอยู่"],
+  ["5.1", "ความผิดหวังที่ยังค้างในใจ", "เรื่องไหนที่ไม่เป็นอย่างที่หวัง และยังค้างอยู่ในใจฉัน"],
+  ["5.2", "สัญญาณว่าไฟกำลังมอด", "ช่วงนี้มีสัญญาณอะไรบ้าง ที่บอกว่าไฟในตัวฉันกำลังมอด"],
+  ["5.3", "ไฟดวงเล็กที่ยังอุ่นอยู่", "อะไรเล็ก ๆ ที่ยังทำให้ใจฉันอุ่นอยู่ในช่วงนี้"],
+  ["6.1", "คนที่อยู่ด้วยแล้วใจเบา", "ใครที่อยู่ด้วยแล้วฉันเป็นตัวเองได้มากที่สุด"],
+  ["6.2", "ความสัมพันธ์ที่ใช้แรงเยอะ", "ความสัมพันธ์ไหนที่ฉันใช้แรงมากเกินไป และฉันอยากขีดเส้นตรงไหน"],
+  ["6.3", "เอ่ยปากขอความช่วยเหลือ", "เรื่องไหนที่ฉันอยากขอให้ใครช่วย แต่ยังไม่กล้าเอ่ยปาก"],
+  ["7.1", "สิ่งที่ติดตัวมาจากบ้าน", "ฉันได้อะไรติดตัวมาจากครอบครัว ที่อยากเก็บไว้ และที่อยากวางลง"],
+  ["7.2", "บทบาทที่ฉันแบกในบ้าน", "บทบาทไหนในบ้านที่ฉันแบกอยู่ และฉันอยากแบกต่อแค่ไหน"],
+  ["7.3", "ส่งความใจดีต่อ", "วันนี้ ฉันอยากทำเรื่องเล็ก ๆ อะไรให้ใครสักคน"],
+  ["8.1", "ความรักแบบที่อยากได้", "ฉันอยากได้รับความรักแบบไหน และจะให้ความรักแบบนั้นกับตัวเองได้อย่างไร"],
+  ["8.2", "ความสัมพันธ์ที่จบไปสอนอะไร", "ความสัมพันธ์ที่จบไปแล้ว สอนอะไรฉันบ้าง"],
+  ["8.3", "ใจที่พร้อมจะรักอีกครั้ง", "ตอนนี้ใจฉันอยู่ตรงไหน บนทางกลับมาเปิดรับความรักอีกครั้ง"],
+  ["9.1", "งานที่ทำอยู่", "งานของฉันตอนนี้ให้อะไรกับฉัน และเอาอะไรไปจากฉัน"],
+  ["9.2", "ความรู้สึกกับเงิน", "ฉันรู้สึกอย่างไรเวลานึกถึงเรื่องเงิน และความรู้สึกนั้นมาจากไหน"],
+  ["9.3", "ค่าของเวลาและฝีมือ", "ฉันให้ค่าเวลาและฝีมือของตัวเองอย่างไร"],
+  ["10.1", "ความตั้งใจสำหรับช่วงนี้", "ช่วงนี้ ฉันอยากให้ตัวเองรู้สึกอย่างไร"],
+  ["10.2", "สิ่งที่อยากสร้าง", "ถ้ามีเวลาว่างหนึ่งปี ฉันอยากสร้างอะไรขึ้นมา"],
+  ["10.3", "เริ่มได้ใน 15 นาที", "สิ่งที่อยากสร้าง ฉันเริ่มได้ด้วยอะไรที่ใช้เวลาไม่ถึง 15 นาที"]
+];
 const REV_NOTE = "ใบที่กลับหัวยังพูดเรื่องเดิม แต่เรื่องนั้นติดขัด ยังไม่ออกมา หรือเกิดอยู่ข้างในใจมากกว่าข้างนอก";
 
 const SPREADS = [
@@ -282,19 +330,72 @@ function esc(t) { return String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<":
 
 let state = { order: [], reversed: [], picks: [], opened: new Set(), shuffled: false };
 
-/* spread menu */
+/* spread menu (Dan 10 ต.ค. 2569: แบบ B) · เมนู = 10 ชุดฮีลใจ + แบบทั่วไป + ตัวช่วย
+   เลือกชุดแล้วมีปุ่ม 4 ปุ่ม: หัวข้อ x.1–x.3 (1 ใบ ป้ายตำแหน่ง = คำถามในเล่ม) + ช่วงเจาะลึก (แบบ d1–d10 เดิม)
+   จำชุดกับหัวข้อล่าสุดไว้ในเครื่อง คนที่ทำตามเล่มกลับมาจะเจอหัวข้อเดิม */
+let topicSel = { set: 1, pick: "1.1" };   // pick = "x.y" หรือ "deep"
+const TOPIC_SPREADS = {};
+TOPICS.forEach(([num, title, ask]) => {
+  const n = +num.split(".")[0];
+  TOPIC_SPREADS[num] = { id: "t" + num, topic: true, name: num + " " + title, ask, pos: [ask],
+                         use: "ชุด " + n + " " + SETS[n - 1] + " · หัวข้อ " + num.split(".")[1] + " จาก 3" };
+});
 (function buildMenu() {
-  const sel = $("spread"); let og = null, last = "";
-  SPREADS.forEach(sp => {
-    if (sp.group !== last) { og = document.createElement("optgroup"); og.label = sp.group; sel.appendChild(og); last = sp.group; }
-    const o = document.createElement("option"); o.value = sp.id; o.textContent = sp.name; og.appendChild(o);
+  const sel = $("spread");
+  const group = label => { const og = document.createElement("optgroup"); og.label = label; sel.appendChild(og); return og; };
+  const add = (og, value, text) => { const o = document.createElement("option"); o.value = value; o.textContent = text; og.appendChild(o); };
+  const sets = group("ชุดฮีลใจ (ภาค 2)");
+  SETS.forEach((name, i) => add(sets, "set" + (i + 1), "ชุด " + (i + 1) + " · " + name));
+  let og = null, last = "";
+  SPREADS.filter(sp => !/^d\d+$/.test(sp.id)).forEach(sp => {
+    if (sp.group !== last) { og = group(sp.group); last = sp.group; }
+    add(og, sp.id, sp.name);
   });
-  try { const r = localStorage.getItem("tarot-rev"); if (r === "1" || r === "0") setRev(r === "1", true); } catch (e) {}
+  sel.value = "one";   // เปิดครั้งแรกเริ่มที่ "1 ใบ · เช็กใจวันนี้" เหมือนเดิม (Dan 10 ต.ค. 2569: 1A) · ครั้งต่อไปเจอชุด/หัวข้อล่าสุด
+  try {
+    const r = localStorage.getItem("tarot-rev"); if (r === "1" || r === "0") setRev(r === "1", true);
+    const saved = JSON.parse(localStorage.getItem("tarot-spread") || "null");
+    if (saved && [...sel.options].some(o => o.value === saved.v)) {
+      sel.value = saved.v;
+      const m = /^set(\d+)$/.exec(saved.v);
+      if (m && (saved.pick === "deep" || TOPIC_SPREADS[saved.pick]?.use.startsWith("ชุด " + m[1] + " "))) topicSel = { set: +m[1], pick: saved.pick };
+      else if (m) topicSel = { set: +m[1], pick: m[1] + ".1" };
+    }
+  } catch (e) {}
 })();
-function spread() { return SPREADS.find(s => s.id === $("spread").value); }
+function setNo() { const m = /^set(\d+)$/.exec($("spread").value); return m ? +m[1] : 0; }
+function spread() {
+  const n = setNo();
+  if (!n) return SPREADS.find(s => s.id === $("spread").value);
+  return topicSel.pick === "deep" ? SPREADS.find(s => s.id === "d" + n) : TOPIC_SPREADS[topicSel.pick];
+}
+function renderTopics() {
+  const n = setNo(), box = $("topics");
+  box.hidden = !n; box.innerHTML = "";
+  if (!n) return;
+  if (topicSel.set !== n) topicSel = { set: n, pick: n + ".1" };
+  const deep = SPREADS.find(s => s.id === "d" + n);
+  const items = [1, 2, 3].map(k => [n + "." + k, n + "." + k, TOPIC_SPREADS[n + "." + k].name.replace(/^\S+ /, ""), "1 ใบ"])
+    .concat([["deep", "เจาะลึก", deep.name.replace(/^ชุด \d+ · /, ""), deep.pos.length + " ใบ"]]);
+  items.forEach(([pick, head, title, count]) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "tile"; b.setAttribute("aria-pressed", topicSel.pick === pick ? "true" : "false");
+    b.innerHTML = "<b>" + esc(head) + "</b>" + esc(title) + "<small>" + count + "</small>";
+    b.addEventListener("click", () => { topicSel = { set: n, pick }; renderTopics(); spreadChanged(); });
+    box.appendChild(b);
+  });
+}
 function showInfo() {
   const sp = spread();
+  $("spreadInfo").hidden = !!setNo();
   $("spreadInfo").innerHTML = "<b>" + esc(sp.name) + "</b> · " + esc(sp.use) + " · ต้องใช้ไพ่ " + sp.pos.length + " ใบ";
+  document.querySelectorAll(".qcard").forEach(q => {
+    q.hidden = !sp.topic;
+    if (!sp.topic) return;
+    q.querySelector(".k").textContent = "คำถามของหัวข้อ " + sp.name.replace(" ", " · ");
+    q.querySelector(".q").textContent = sp.ask;
+  });
+  try { localStorage.setItem("tarot-spread", JSON.stringify({ v: $("spread").value, pick: topicSel.pick })); } catch (e) {}
 }
 
 /* ไพ่กลับหัว: ต้องเลือกก่อนสับ (Dan 6 ต.ค. 2569) · ทิศของทุกใบถูกสุ่มตอนสับ เปลี่ยนใจหลังสับ = สับใหม่ · จำตัวเลือกล่าสุดไว้ในเครื่อง */
@@ -395,7 +496,7 @@ function openCard(i, slotEl) {
 
 function showDetail(i) {
   const sp = spread(); const { card, rev } = cardAt(state.picks[i]);
-  let h = '<p class="sub">ตำแหน่งที่ ' + (i + 1) + " · " + esc(sp.pos[i]) + "</p>";
+  let h = '<p class="sub">' + (sp.topic ? "คำถาม" : "ตำแหน่งที่ " + (i + 1)) + " · " + esc(sp.pos[i]) + "</p>";
   h += "<h3>" + esc(card.en) + (rev ? ' <span class="badge">กลับหัว</span>' : "") + "</h3>";
   if (card.kind === "major") {
     const m = card.data;
@@ -521,7 +622,8 @@ $("showLog").addEventListener("click", showLog);
 $("copyLog").addEventListener("click", copyLog);
 $("clearLog").addEventListener("click", buildLog);
 
-$("spread").addEventListener("change", () => { showInfo(); if (mode === "log") { reset(); buildLog(); } else if (state.shuffled) { reset(); } });
+function spreadChanged() { showInfo(); if (mode === "log") { reset(); buildLog(); } else if (state.shuffled) { reset(); } }
+$("spread").addEventListener("change", () => { renderTopics(); spreadChanged(); });
 $("revNo").addEventListener("click", () => setRev(false));
 $("revYes").addEventListener("click", () => setRev(true));
 $("shuffle").addEventListener("click", doShuffle);
@@ -530,5 +632,6 @@ $("reset").addEventListener("click", () => reset());
 $("openAll").addEventListener("click", () => { [...$("slots").children].forEach((el, i) => openCard(i, el)); showDetail(0); });
 $("shuffle").disabled = !revChosen();
 if (!revChosen()) $("status").textContent = ASK_REV;
+renderTopics();
 showInfo();
 </script>
