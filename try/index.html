@@ -50,6 +50,7 @@
   /* หน้า 2: ลิงก์ทับ QR ในภาพ (ภาพเขียนว่า "แตะที่ QR ได้เลย") · ตำแหน่งจากลิงก์ใน PDF ตัวอย่าง (303.8, 288.8)–(366, 351) บนหน้า 420×595 pt */
   .pages .pg { position: relative; }
   .pages .qrhit { position: absolute; left: 71.5%; top: 48%; width: 16.3%; height: 11.5%; border-radius: 4px; }
+  .pages .tip { font-size: 14px; color: var(--muted); text-align: center; margin-top: -6px; text-wrap: pretty; }   /* ใต้ปุ่มโต๊ะเปิดไพ่: บอกว่าโต๊ะมีความหมายไพ่ (Dan 10 ต.ค. 2569: B) */
   .pages .go { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
   .btn { display: inline-block; text-decoration: none; font: inherit; font-size: 15px; font-weight: 600; border-radius: 99px; padding: 10px 20px; border: 1px solid var(--sage); color: var(--sage); background: transparent; cursor: pointer; }
   .btn.solid { background: var(--sage); color: var(--on-sage); }
@@ -139,7 +140,12 @@
         hit.target = "_blank"; hit.rel = "noopener"; hit.setAttribute("aria-label", "เปิดโต๊ะเปิดไพ่ออนไลน์");
         pg.appendChild(hit); box.appendChild(pg);
       } else box.appendChild(img);
-      if (i === 1) box.appendChild(go([["เปิดโต๊ะเปิดไพ่ออนไลน์", "/try/draw/", false]]));
+      if (i === 1) {
+        box.appendChild(go([["เปิดโต๊ะเปิดไพ่ออนไลน์", "/try/draw/", false]]));
+        var tip = document.createElement("p"); tip.className = "tip";
+        tip.textContent = "อยากรู้ความหมายไพ่ แตะไพ่ที่เปิดแล้วในโต๊ะได้เลยครับ ถ้าเปิดจากสำรับของตัวเอง กด \u201cบันทึกไพ่ที่เปิดเอง\u201d แล้วใส่ชื่อไพ่ที่ได้ ความหมายจะขึ้นให้เหมือนกัน";
+        box.appendChild(tip);
+      }
       if (i === 8) box.appendChild(go([["ดูหน้าหนังสือ", "/?src=sample", true]]));
     });
     document.getElementById("feedback").hidden = false;
