@@ -113,6 +113,9 @@
   .price-band small { color: var(--plum); opacity: .85; }
   .embed { border: 2px dashed var(--soft-sage); border-radius: 16px; min-height: 260px; display: grid; place-items: center; text-align: center; padding: 28px; color: var(--muted); background: rgba(232,225,212,.45); }
   .embed strong { color: var(--forest); display: block; margin-bottom: 6px; }
+  .embed.live { display: block; padding: 0; border: 0; background: transparent; min-height: 0; }
+  .embed.live iframe { display: block; width: 100%; height: 1180px; border: 0; border-radius: 16px; background: transparent; }
+  .embed-fallback { font-size: 14px; color: var(--muted); text-align: center; margin: 10px 0 0; }
   .terms { font-size: 14px; color: var(--muted); margin-top: 16px; }
 
   /* faq */
@@ -318,11 +321,10 @@
       <li><div><strong>แนบสลิปในแบบฟอร์ม</strong><span>ระบบตรวจสลิปอัตโนมัติ ใช้เวลาไม่กี่วินาที</span></div></li>
       <li><div><strong>รับไฟล์ทางอีเมล</strong><span>ปกติภายใน 1 นาที พร้อมหลักฐานการซื้อในอีเมลเดียวกัน</span></div></li>
     </ol>
-    <div class="embed">
-      <div>
-        <strong>แบบฟอร์มสั่งซื้อจะอยู่ตรงนี้</strong>
-        ระบบกำลังจัดเตรียม เปิดรับคำสั่งซื้อเร็ว ๆ นี้ครับ
-      </div>
+    <!-- แบบฟอร์มสั่งซื้อ = เว็บแอป Apps Script "BooksByDan" (ระบบรับเงิน · ตรวจสลิป · ส่งไฟล์) ฝังเป็น iframe · ความสูงปรับตามเนื้อหาผ่าน postMessage · ป้าย ?src= ส่งต่อให้แบบฟอร์ม -->
+    <div class="embed live" id="order-embed">
+      <iframe id="order-frame" title="แบบฟอร์มสั่งซื้อ เปิดไพ่ ฟังใจ" src="https://script.google.com/macros/s/AKfycbx81ZE8uvhtCBztsZyHPNwYL8nXV3HN5XS8WJNB1lVd5BfxvpgY2t4vWbWT3SCplNImpQ/exec" loading="lazy" allow="clipboard-write" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <p class="embed-fallback">ถ้าแบบฟอร์มไม่แสดง <a id="order-link" href="https://script.google.com/macros/s/AKfycbx81ZE8uvhtCBztsZyHPNwYL8nXV3HN5XS8WJNB1lVd5BfxvpgY2t4vWbWT3SCplNImpQ/exec" target="_blank" rel="noopener">เปิดแบบฟอร์มสั่งซื้อในหน้าใหม่</a></p>
     </div>
     <p class="terms">สินค้าดิจิทัล ไม่คืนเงิน ยกเว้นไฟล์เสียเปิดไม่ได้ ผมจะส่งไฟล์ใหม่ให้ · ภาพสลิปจะถูกส่งตรวจกับผู้ให้บริการตรวจสลิป (EasySlip) เพื่อยืนยันการชำระเงิน · ชื่อและอีเมลใช้เพื่อส่งไฟล์และหลักฐานการซื้อเท่านั้น</p>
   </div>
@@ -385,5 +387,28 @@
   </div>
 </footer>
 
+<script>
+/* ป้าย ?src= (ig · fb · tiktok · yt · sample · draw · line) เก็บค่าแรกที่เข้ามา แล้วส่งต่อให้แบบฟอร์มสั่งซื้อ · ปรับความสูง iframe ตามข้อความจากแบบฟอร์ม */
+(function () {
+  var frame = document.getElementById('order-frame'), link = document.getElementById('order-link');
+  if (!frame) return;
+  var src = '';
+  try {
+    var q = (new URLSearchParams(location.search).get('src') || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 20);
+    if (q) sessionStorage.setItem('bbd_src', q);
+    src = sessionStorage.getItem('bbd_src') || q;
+  } catch (e) {}
+  if (src) {
+    var sep = frame.src.indexOf('?') === -1 ? '?' : '&';
+    frame.src = frame.src + sep + 'src=' + encodeURIComponent(src);
+    if (link) link.href = link.href + sep + 'src=' + encodeURIComponent(src);
+  }
+  window.addEventListener('message', function (ev) {
+    var d = ev.data;
+    if (!d || d.bbd !== 'height' || !(d.h > 200)) return;
+    frame.style.height = Math.min(4000, Math.round(d.h) + 24) + 'px';
+  });
+})();
+</script>
 </body>
 </html>
