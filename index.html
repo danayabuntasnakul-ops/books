@@ -111,12 +111,46 @@
   .price-band { background: var(--blush); border-radius: 16px; padding: 18px 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; margin-bottom: 20px; }
   .price-band b { font-family: var(--display); font-size: 26px; font-weight: 600; }
   .price-band small { color: var(--plum); opacity: .85; }
-  .embed { border: 2px dashed var(--soft-sage); border-radius: 16px; min-height: 260px; display: grid; place-items: center; text-align: center; padding: 28px; color: var(--muted); background: rgba(232,225,212,.45); }
-  .embed strong { color: var(--forest); display: block; margin-bottom: 6px; }
-  .embed.live { display: block; padding: 0; border: 0; background: transparent; min-height: 0; }
-  #order { scroll-margin-top: 72px; }   /* ปุ่ม "สั่งซื้อ" เลื่อนมาที่แบบฟอร์มพอดี ไม่ถูกแถบบนบัง */
-  .embed.live iframe { display: block; width: 100%; height: 1180px; border: 0; border-radius: 16px; background: transparent; }
-  .embed-fallback { font-size: 14px; color: var(--muted); text-align: center; margin: 10px 0 0; }
+  /* แบบฟอร์มสั่งซื้อ (HTML/JS ในหน้านี้เอง · 20 ต.ค. 2569) ธีมเดียวกับหน้า · สไตล์ทุกตัวผูกกับ #order ไม่ชนส่วนอื่น · scroll-margin: ปุ่ม "สั่งซื้อ" เลื่อนมาพอดี ไม่ถูกแถบบนบัง */
+  #order { scroll-margin-top: 72px; max-width: 560px; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 24px 20px 26px; font-size: 16px; line-height: 1.7; }
+  #order h3 { font-size: 24px; margin: 0 0 6px; }
+  #order .sub { color: var(--muted); margin: 0 0 20px; font-size: 15px; }
+  #order label { display: block; font-weight: 600; font-size: 14px; margin: 14px 0 6px; }
+  #order label small { font-weight: 400; color: var(--muted); }
+  #order input[type=text], #order input[type=email], #order select { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: #fff; border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 13px; outline: none; }
+  #order input:focus, #order select:focus { border-color: var(--forest); }
+  #order .terms-box { background: var(--linen); border-radius: 12px; padding: 12px 14px; margin: 18px 0 6px; font-size: 14px; color: var(--muted); }
+  #order .terms-box label { display: flex; gap: 10px; align-items: flex-start; font-weight: 600; color: var(--ink); margin: 0 0 8px; font-size: 15px; }
+  #order .terms-box input { margin-top: 5px; width: 18px; height: 18px; flex: none; }
+  #order .terms-box ul { margin: 0; padding-left: 18px; }
+  #order .terms-box li { margin: 2px 0; }
+  #order .of-btn { display: block; width: 100%; border: 0; cursor: pointer; font: inherit; font-weight: 600; font-size: 16px; border-radius: 999px; padding: 14px 22px; margin-top: 18px; background: var(--plum); color: var(--paper); box-shadow: 0 6px 18px rgba(73,47,63,.22); }
+  #order .of-btn:disabled { opacity: .55; cursor: default; box-shadow: none; }
+  #order .err { display: none; background: #FDECEA; color: #B03A2E; border-radius: 10px; padding: 10px 14px; margin-top: 14px; font-size: 15px; }
+  #order .err.show { display: block; }
+  #order .amount { text-align: center; background: var(--blush); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; }
+  #order .amount .n { font-family: var(--display); font-size: 40px; font-weight: 600; line-height: 1.1; color: var(--plum); }
+  #order .amount .n small { font-size: 18px; font-weight: 400; }
+  #order .amount .tag { display: inline-block; background: var(--plum); color: var(--paper); font-size: 13px; font-weight: 600; padding: 2px 12px; border-radius: 999px; margin-top: 6px; }
+  #order .qr { text-align: center; }
+  #order .qr img, #order .qr svg { width: min(72vw, 280px); height: auto; border: 1px solid var(--line); border-radius: 12px; background: #fff; display: inline-block; }
+  #order .hint { font-size: 14px; color: var(--muted); margin: 10px 0 0; }
+  #order .hint b { color: var(--ink); }
+  #order .save { display: inline-block; margin-top: 8px; font-size: 14px; color: var(--forest); font-weight: 600; text-decoration: none; border: 1.5px solid var(--forest); border-radius: 999px; padding: 7px 16px; }
+  #order .upload { border: 2px dashed var(--soft-sage); border-radius: 14px; padding: 18px; text-align: center; cursor: pointer; margin-top: 8px; background: rgba(232,225,212,.35); }
+  #order .upload.has { border-style: solid; border-color: var(--forest); }
+  #order .upload .ic { font-size: 28px; line-height: 1; }
+  #order .upload .t { font-size: 15px; color: var(--muted); margin-top: 6px; }
+  #order .upload img { max-width: 180px; max-height: 220px; margin: 10px auto 0; display: none; border-radius: 8px; }
+  #order .wait { text-align: center; padding: 28px 10px; }
+  #order .spin { width: 36px; height: 36px; border: 3px solid var(--linen); border-top-color: var(--forest); border-radius: 50%; margin: 0 auto 14px; animation: of-sp .9s linear infinite; }
+  @keyframes of-sp { to { transform: rotate(360deg); } }
+  #order .done { text-align: center; padding: 12px 0 4px; }
+  #order .done .big { font-size: 46px; line-height: 1; margin-bottom: 10px; }
+  #order .done p { margin: 0 0 10px; }
+  #order .done .no { display: inline-block; background: var(--linen); border-radius: 999px; padding: 4px 14px; font-weight: 600; font-size: 14px; }
+  #order .back { display: block; width: 100%; text-align: center; margin-top: 14px; font-size: 14px; color: var(--muted); cursor: pointer; text-decoration: underline; background: none; border: 0; font-family: inherit; padding: 0; }
+  #order [hidden] { display: none !important; }
   .terms { font-size: 14px; color: var(--muted); margin-top: 16px; }
   .terms-before-form { margin-bottom: 12px; }
 
@@ -323,13 +357,85 @@
       <li><div><strong>แนบสลิปในแบบฟอร์ม</strong><span>ระบบตรวจสลิปอัตโนมัติ ใช้เวลาไม่กี่วินาที</span></div></li>
       <li><div><strong>รับไฟล์ทางอีเมล</strong><span>ปกติภายใน 1 นาที พร้อมหลักฐานการซื้อในอีเมลเดียวกัน</span></div></li>
     </ol>
-    <p class="terms terms-before-form">แบบฟอร์มนี้เก็บชื่อ อีเมล ภาพสลิป และคำตอบว่าคุณรู้จักเล่มนี้จากไหน อ่านว่าผมใช้ทำอะไร เก็บนานแค่ไหน และส่งให้ใครบ้าง ได้ที่<a href="privacy/">ประกาศความเป็นส่วนตัว</a></p>
-    <!-- แบบฟอร์มสั่งซื้อ =เว็บแอป Apps Script "BooksByDan" (ระบบรับเงิน · ตรวจสลิป · ส่งไฟล์) ฝังเป็น iframe · ความสูงปรับตามเนื้อหาผ่าน postMessage · ป้าย ?src= ส่งต่อให้แบบฟอร์ม -->
-    <div class="embed live" id="order">
-      <iframe id="order-frame" title="แบบฟอร์มสั่งซื้อ เปิดไพ่ ฟังใจ" src="https://script.google.com/macros/s/AKfycbx81ZE8uvhtCBztsZyHPNwYL8nXV3HN5XS8WJNB1lVd5BfxvpgY2t4vWbWT3SCplNImpQ/exec" allow="clipboard-write" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      <p class="embed-fallback">ถ้าแบบฟอร์มไม่แสดง <a id="order-link" href="https://script.google.com/macros/s/AKfycbx81ZE8uvhtCBztsZyHPNwYL8nXV3HN5XS8WJNB1lVd5BfxvpgY2t4vWbWT3SCplNImpQ/exec" target="_blank" rel="noopener">เปิดแบบฟอร์มสั่งซื้อในหน้าใหม่</a></p>
+    <p class="terms terms-before-form">แบบฟอร์มนี้เก็บชื่อ อีเมล ภาพสลิป และคำตอบว่ารู้จักเล่มนี้จากไหน ถ้าคุณตอบ อ่านว่าผมใช้ทำอะไร เก็บนานแค่ไหน และส่งให้ใครบ้าง ได้ที่<a href="privacy/">ประกาศความเป็นส่วนตัว</a></p>
+    <!-- แบบฟอร์มสั่งซื้อ (20 ต.ค. 2569): HTML/JS ในหน้านี้เอง ส่งข้อมูลไป Apps Script "BooksByDan" (doPost คืน JSON · ตรวจสลิป EasySlip · ลงชีต · ส่งไฟล์) ด้วย fetch
+         เลิกใช้ iframe/หน้าของ Google เพราะเบราว์เซอร์ในแอป IG/TikTok/FB บน iPhone แสดงหน้า Google ไม่ได้ · หน้า Google (doGet) ยังอยู่เป็นทางสำรองของ Dan ไม่โชว์ลูกค้า
+         ข้อความทุกคำต้องตรงกับหน้าสำรองใน ระบบรับเงิน/dev/BooksByDan.readable.js (getShopPageHTML) · ตัวเลือก "รู้จักจากไหน" ต้องตรงกับ CONFIG.SOURCES (harness ตรวจ) -->
+    <div id="order">
+
+      <!-- ① ข้อมูลผู้ซื้อ -->
+      <div id="of-step1">
+        <h3>สั่งซื้อ เปิดไพ่ ฟังใจ</h3>
+        <p class="sub">กรอกข้อมูลสั้น ๆ แล้วสแกน QR โอนเงิน ไฟล์ส่งเข้าอีเมลทันทีที่ระบบตรวจสลิปผ่านครับ</p>
+        <label for="of-name">ชื่อ <small>(ใช้ในหลักฐานการซื้อ)</small></label>
+        <input type="text" id="of-name" autocomplete="name" maxlength="80">
+        <label for="of-email">อีเมลสำหรับรับไฟล์</label>
+        <input type="email" id="of-email" autocomplete="email" inputmode="email" maxlength="120">
+        <label for="of-email2">พิมพ์อีเมลอีกครั้ง <small>(กันพิมพ์ผิดแล้วไฟล์ส่งไม่ถึง)</small></label>
+        <input type="email" id="of-email2" inputmode="email" maxlength="120" autocomplete="off">
+        <label for="of-source">รู้จักเล่มนี้จากไหนครับ <small>(ข้ามได้)</small></label>
+        <select id="of-source">
+          <option value="">— เลือก —</option>
+          <option value="Instagram">Instagram</option>
+          <option value="Facebook">Facebook</option>
+          <option value="TikTok">TikTok</option>
+          <option value="YouTube">YouTube</option>
+          <option value="เพื่อนแนะนำ">เพื่อนแนะนำ</option>
+          <option value="ไฟล์ตัวอย่างฟรี">ไฟล์ตัวอย่างฟรี</option>
+          <option value="โต๊ะเปิดไพ่ออนไลน์">โต๊ะเปิดไพ่ออนไลน์</option>
+          <option value="ค้นใน Google">ค้นใน Google</option>
+          <option value="อื่น ๆ">อื่น ๆ</option>
+        </select>
+        <input type="text" id="of-sourceOther" placeholder="พิมพ์ได้เลยครับ" maxlength="80" style="margin-top:8px" hidden>
+        <div class="terms-box">
+          <label><input type="checkbox" id="of-accept"> ยอมรับเงื่อนไขการสั่งซื้อ</label>
+          <ul>
+            <li>สินค้าดิจิทัล ไม่คืนเงิน ยกเว้นไฟล์เสียเปิดไม่ได้ ผมส่งไฟล์ใหม่ให้</li>
+            <li>ภาพสลิปจะถูกส่งตรวจกับผู้ให้บริการตรวจสลิป (EasySlip) เพื่อยืนยันการชำระเงิน</li>
+            <li>ชื่อและอีเมลใช้เพื่อส่งไฟล์และหลักฐานการซื้อ ผมไม่ขายข้อมูลนี้ และไม่ส่งให้ใครเอาไปใช้เรื่องอื่น อ่านรายละเอียดได้ที่<a href="privacy/" target="_blank" rel="noopener">ประกาศความเป็นส่วนตัว</a></li>
+            <li>ไฟล์สำหรับใช้ส่วนตัว ไม่เผยแพร่ต่อ</li>
+          </ul>
+        </div>
+        <div id="of-err1" class="err"></div>
+        <button type="button" class="of-btn" id="of-btn1">ไปชำระเงิน</button>
+      </div>
+
+      <!-- ② QR + สลิป -->
+      <div id="of-step2" hidden>
+        <h3>สแกน QR เพื่อโอน</h3>
+        <p class="sub" style="margin-bottom:14px">ยอดจะขึ้นในแอปธนาคารเอง ไม่ต้องพิมพ์ครับ</p>
+        <div class="amount">
+          <div style="font-size:13px;color:var(--muted)">ยอดที่ต้องโอน</div>
+          <div class="n"><small>฿</small><span id="of-amt">–</span></div>
+          <div class="tag" id="of-tierTag" hidden></div>
+        </div>
+        <div class="qr" id="of-qrBox"></div>
+        <div style="text-align:center"><a class="save" id="of-saveQr" href="#" download="promptpay.png" hidden>บันทึกรูป QR</a></div>
+        <p class="hint"><b>เปิดจากมือถือ:</b> แคปหน้าจอ (หรือกดค้างที่รูป QR) → เปิดแอปธนาคาร → สแกน → เลือกรูปจากอัลบั้ม<br><b>เปิดจากคอม:</b> สแกนหน้าจอด้วยแอปธนาคารได้เลย</p>
+        <label>โอนแล้ว แนบรูปสลิปตรงนี้</label>
+        <div class="upload" id="of-upBox">
+          <div class="ic" id="of-upIc">📎</div>
+          <div class="t" id="of-upT">แตะเพื่อเลือกรูปสลิป (JPG / PNG)</div>
+          <img id="of-slipPrev" alt="">
+        </div>
+        <input type="file" id="of-slip" accept="image/*" hidden>
+        <div id="of-err2" class="err"></div>
+        <button type="button" class="of-btn" id="of-btn2">ส่งสลิป</button>
+        <p class="hint" style="text-align:center">ระบบตรวจสลิปอัตโนมัติ ใช้เวลาไม่กี่วินาที</p>
+        <button type="button" class="back" id="of-back">← แก้ไขชื่อหรืออีเมล</button>
+      </div>
+
+      <!-- กำลังตรวจ -->
+      <div id="of-wait" class="wait" hidden>
+        <div class="spin"></div>
+        <div><b>กำลังตรวจสอบสลิป…</b></div>
+        <div class="hint">ไม่ต้องปิดหน้านี้นะครับ ปกติ 5–15 วินาที</div>
+      </div>
+
+      <!-- ③ ผล -->
+      <div id="of-step3" hidden></div>
     </div>
-    <p class="terms">สินค้าดิจิทัล ไม่คืนเงิน ยกเว้นไฟล์เสียเปิดไม่ได้ ผมจะส่งไฟล์ใหม่ให้ · ภาพสลิปและชื่อที่คุณกรอกจะถูกส่งให้ผู้ให้บริการตรวจสลิป (EasySlip) เพื่อตรวจการชำระเงิน · ชื่อและอีเมลใช้เพื่อส่งไฟล์และหลักฐานการซื้อ ผมไม่ขาย และไม่ส่งให้ใครเอาไปใช้เรื่องอื่น</p>
+    <p class="terms">สินค้าดิจิทัล ไม่คืนเงิน ยกเว้นไฟล์เสียเปิดไม่ได้ ผมจะส่งไฟล์ใหม่ให้ · ภาพสลิปจะถูกส่งให้ผู้ให้บริการตรวจสลิป (EasySlip) เพื่อตรวจการชำระเงิน · ชื่อและอีเมลใช้เพื่อส่งไฟล์และหลักฐานการซื้อ ผมไม่ขาย และไม่ส่งให้ใครเอาไปใช้เรื่องอื่น</p>
   </div>
 </section>
 
@@ -415,26 +521,166 @@
 </footer>
 
 <script>
-/* ป้าย ?src= (ig · fb · tiktok · yt · sample · draw · line) เก็บค่าแรกที่เข้ามา แล้วส่งต่อให้แบบฟอร์มสั่งซื้อ · ปรับความสูง iframe ตามข้อความจากแบบฟอร์ม */
+/* แบบฟอร์มสั่งซื้อ (20 ต.ค. 2569): ① ชื่อ-อีเมล → ② QR ใส่ยอด + แนบสลิป → ③ ผล
+   ส่ง JSON ไป Apps Script "BooksByDan" (doPost) ด้วย fetch POST แบบ text/plain → ไม่มี preflight · Google ตอบ 302 ไป googleusercontent พร้อม Access-Control-Allow-Origin: *
+   จึงใช้ได้ในเบราว์เซอร์ของแอป IG/TikTok/FB บน iPhone ซึ่งแสดงหน้า HtmlService ของ Google ไม่ได้ (เหตุที่เลิกใช้ iframe)
+   ป้าย ?src= (ig · fb · tiktok · yt · sample · draw · line · metaada metaadb ttada ttadb) เก็บค่าแรกที่เข้ามาใน sessionStorage แล้วส่งไปกับคำสั่งซื้อ → คอลัมน์ src ในชีต */
 (function () {
-  var frame = document.getElementById('order-frame'), link = document.getElementById('order-link');
-  if (!frame) return;
-  var src = '';
-  try {
-    var q = (new URLSearchParams(location.search).get('src') || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 20);
-    if (q) sessionStorage.setItem('bbd_src', q);
-    src = sessionStorage.getItem('bbd_src') || q;
-  } catch (e) {}
-  if (src) {
-    var sep = frame.src.indexOf('?') === -1 ? '?' : '&';
-    frame.src = frame.src + sep + 'src=' + encodeURIComponent(src);
-    if (link) link.href = link.href + sep + 'src=' + encodeURIComponent(src);
+  var API = 'https://script.google.com/macros/s/AKfycbx81ZE8uvhtCBztsZyHPNwYL8nXV3HN5XS8WJNB1lVd5BfxvpgY2t4vWbWT3SCplNImpQ/exec';
+  var OWNER = 'artproducktion@gmail.com';
+  var NET_ERR = 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้งครับ ถ้ายังไม่ได้ อีเมลมาที่ ' + OWNER;
+  var root = document.getElementById('order');
+  if (!root || !window.fetch) return;
+  var state = { token: '', price: 0, slip: '', slipName: '', src: '', inApp: false };
+  function el(id) { return document.getElementById('of-' + id); }
+  function val(id) { return (el(id).value || '').trim(); }
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function showErr(id, msg) { var e = el(id); e.textContent = msg; e.className = 'err show'; }
+  function hideErr(id) { el(id).className = 'err'; }
+  function show(id, on) { el(id).hidden = !on; }
+  function toTop() { try { root.scrollIntoView({ block: 'start' }); } catch (e) { window.scrollTo(0, root.offsetTop - 72); } }
+
+  // ป้ายที่มา: ค่าใน URL ครั้งแรกชนะ · จำไว้ตลอดการเปิดแท็บนี้ (ไปหน้าอื่นแล้วกลับมาก็ยังอยู่)
+  var q = '';
+  try { q = (new URLSearchParams(location.search).get('src') || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 20); } catch (e) {}
+  state.src = q;
+  try { if (q) sessionStorage.setItem('bbd_src', q); state.src = sessionStorage.getItem('bbd_src') || q; } catch (e) {}
+  // ปุ่ม "บันทึกรูป QR" ใช้ไม่ได้ในเบราว์เซอร์ของแอป IG/FB/TikTok/LINE → ไม่แสดง ให้แคปหน้าจอแทน
+  state.inApp = /Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly|BytedanceWebview|Line\//i.test(navigator.userAgent);
+
+  // เรียก Apps Script: ส่งข้อความ JSON · คำตอบต้องเป็น JSON (ถ้าไม่ใช่ = Google ตอบหน้า error → แจ้งลองใหม่)
+  function api(body, timeoutMs, cb) {
+    var done = false;
+    var timer = setTimeout(function () { finish(null, 'timeout'); }, timeoutMs);
+    function finish(j, err) { if (done) return; done = true; clearTimeout(timer); cb(j, err); }
+    try {
+      fetch(API, { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow', cache: 'no-store' })
+        .then(function (r) { return r.text(); })
+        .then(function (txt) { var j = null; try { j = JSON.parse(txt); } catch (e) {} finish(j, j ? null : 'badjson'); })
+        .catch(function (e) { finish(null, (e && e.message) || 'network'); });
+    } catch (e) { finish(null, 'network'); }
   }
-  window.addEventListener('message', function (ev) {
-    var d = ev.data;
-    if (!d || d.bbd !== 'height' || !(d.h > 200)) return;
-    frame.style.height = Math.min(4000, Math.round(d.h) + 24) + 'px';
+
+  // ย่อรูปสลิปในเครื่องก่อนส่ง (สำเนาของ PAY_CLIENT_SLIP_JS ใน ระบบรับเงิน/dev/PaymentCore.readable.js — harness ตรวจว่าตรงกัน)
+  function readSlipFile(file, cb) {
+    if (!file) return cb('', 'no file');
+    if (!/^image\//.test(file.type)) return cb('', 'not image');
+    var reader = new FileReader();
+    reader.onerror = function () { cb('', 'read error'); };
+    reader.onload = function (ev) {
+      var src = ev.target.result;
+      var img = new Image();
+      img.onload = function () {
+        var MAX = 1600, w = img.naturalWidth, h = img.naturalHeight;
+        var scale = Math.min(1, MAX / Math.max(w, h));
+        if (scale === 1 && file.size < 1500000 && file.type === 'image/jpeg') return cb(src, null);
+        var cv = document.createElement('canvas');
+        cv.width = Math.round(w * scale); cv.height = Math.round(h * scale);
+        var cx = cv.getContext('2d');
+        cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height);
+        cx.drawImage(img, 0, 0, cv.width, cv.height);
+        try { cb(cv.toDataURL('image/jpeg', 0.88), null); } catch (e) { cb(src, null); }
+      };
+      img.onerror = function () { cb('', 'decode error'); };
+      img.src = src;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // SVG → PNG ให้กดค้างบันทึกลงอัลบั้มได้ (ถ้าแปลงไม่ได้ แสดง SVG ตรง ๆ)
+  function renderQr(svg, amountText) {
+    var box = el('qrBox'); box.innerHTML = svg;
+    var save = el('saveQr'); save.hidden = true;
+    var img = new Image();
+    img.onload = function () {
+      try {
+        var cv = document.createElement('canvas'); cv.width = cv.height = 720;
+        var cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, 720, 720); cx.drawImage(img, 0, 0, 720, 720);
+        var png = cv.toDataURL('image/png');
+        box.innerHTML = '<img src="' + png + '" alt="QR พร้อมเพย์ ' + esc(amountText) + ' บาท">';
+        if (!state.inApp) { save.href = png; save.download = 'promptpay-' + String(amountText).replace(/[^0-9.]/g, '') + '.png'; save.hidden = false; }
+      } catch (e) {}
+    };
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  }
+
+  function goPay() {
+    hideErr('err1');
+    var name = val('name'), email = val('email').toLowerCase(), email2 = val('email2').toLowerCase();
+    if (!name) return showErr('err1', 'กรุณากรอกชื่อครับ');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return showErr('err1', 'อีเมลไม่ถูกต้องครับ');
+    if (email !== email2) return showErr('err1', 'อีเมลสองช่องไม่ตรงกัน กรุณาตรวจอีกครั้งครับ');
+    if (!el('accept').checked) return showErr('err1', 'กรุณาติ๊กยอมรับเงื่อนไขก่อนครับ');
+    var b = el('btn1'); b.disabled = true; b.textContent = 'กำลังเตรียม QR…';
+    api({ action: 'checkout' }, 30000, function (r, err) {
+      b.disabled = false; b.textContent = 'ไปชำระเงิน';
+      if (err || !r) return showErr('err1', NET_ERR);
+      if (!r.open) return showErr('err1', r.message || 'ระบบขัดข้อง กรุณาลองใหม่ครับ');
+      state.token = r.token; state.price = r.price;
+      el('amt').textContent = r.amountText;
+      var tag = el('tierTag');
+      if (r.tier === 'launch') { tag.textContent = 'ราคาเปิดตัว · เหลืออีก ' + r.launchLeft + ' เล่ม'; tag.hidden = false; } else tag.hidden = true;
+      renderQr(r.qrSvg, r.amountText);
+      show('step1', false); show('step2', true); toTop();
+    });
+  }
+
+  function onSlipPick(ev) {
+    var f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    hideErr('err2');
+    el('upT').textContent = 'กำลังอ่านรูป…';
+    readSlipFile(f, function (dataUrl, err) {
+      if (err || !dataUrl) { state.slip = ''; el('upT').textContent = 'แตะเพื่อเลือกรูปสลิป (JPG / PNG)'; return showErr('err2', 'อ่านรูปไม่ได้ กรุณาเลือกรูปสลิปเป็น JPG หรือ PNG ครับ'); }
+      state.slip = dataUrl; state.slipName = f.name || 'slip.jpg';
+      var p = el('slipPrev'); p.src = dataUrl; p.style.display = 'block';
+      el('upIc').textContent = '✅'; el('upT').textContent = f.name || 'เลือกรูปแล้ว';
+      el('upBox').className = 'upload has';
+    });
+  }
+
+  function sendSlip() {
+    hideErr('err2');
+    if (!state.slip) return showErr('err2', 'กรุณาแนบรูปสลิปก่อนครับ');
+    var data = {
+      action: 'submit',
+      name: val('name'), email: val('email').toLowerCase(), email2: val('email2').toLowerCase(),
+      source: val('source'), sourceOther: val('sourceOther'), src: state.src || '',
+      accept: el('accept').checked, token: state.token, slipBase64: state.slip, slipName: state.slipName
+    };
+    show('step2', false); show('wait', true); toTop();
+    api(data, 120000, function (r, err) {
+      show('wait', false);
+      if (err || !r) { show('step2', true); return showErr('err2', NET_ERR); }
+      if (!r.success) { show('step2', true); return showErr('err2', r.message || 'ส่งไม่สำเร็จ กรุณาลองใหม่ครับ'); }
+      var h;
+      if (r.delivered) {
+        h = '<div class="done"><div class="big">📬</div><h3>ส่งไฟล์เข้าอีเมลแล้วครับ</h3>' +
+            '<p>ส่งไปที่ <b>' + esc(r.email) + '</b> พร้อมหลักฐานการซื้อและลิงก์ไพ่ที่แถมมากับหนังสือ</p>' +
+            '<p class="hint">ถ้าไม่เจอภายใน 10 นาที ลองดูในกล่องสแปมหรือโปรโมชัน ถ้ายังไม่เจอ อีเมลมาที่ ' + esc(OWNER) + ' ครับ</p>' +
+            '<span class="no">เลขที่ ' + esc(r.orderNo) + '</span></div>';
+      } else {
+        h = '<div class="done"><div class="big">🕊️</div><h3>ได้รับสลิปแล้ว กำลังตรวจสอบครับ</h3>' +
+            '<p>ระบบตรวจอัตโนมัติไม่ผ่านในรอบแรก ผมจะตรวจเองแล้วส่งไฟล์ให้ที่ <b>' + esc(r.email) + '</b> ปกติไม่เกิน 24 ชั่วโมง</p>' +
+            '<p class="hint">มีข้อสงสัย อีเมลมาที่ ' + esc(OWNER) + ' พร้อมเลขที่คำสั่งซื้อครับ</p>' +
+            '<span class="no">เลขที่ ' + esc(r.orderNo) + '</span></div>';
+      }
+      el('step3').innerHTML = h; show('step3', true); toTop();
+    });
+  }
+
+  var sel = el('source');
+  sel.addEventListener('change', function () {
+    var other = sel.value !== '' && sel.value === sel.options[sel.options.length - 1].value;
+    el('sourceOther').hidden = !other;
+    if (other) el('sourceOther').focus();
   });
+  el('email2').addEventListener('paste', function (ev) { ev.preventDefault(); });
+  el('upBox').addEventListener('click', function () { el('slip').click(); });
+  el('slip').addEventListener('change', onSlipPick);
+  el('btn1').addEventListener('click', goPay);
+  el('btn2').addEventListener('click', sendSlip);
+  el('back').addEventListener('click', function () { show('step2', false); show('step1', true); toTop(); });
 })();
 </script>
 </body>
