@@ -136,6 +136,8 @@
   #order .qr img, #order .qr svg { width: min(72vw, 280px); height: auto; border: 1px solid var(--line); border-radius: 12px; background: #fff; display: inline-block; }
   #order .hint { font-size: 14px; color: var(--muted); margin: 10px 0 0; }
   #order .hint b { color: var(--ink); }
+  #order .paid-note { background: var(--linen); border-radius: 10px; padding: 8px 12px; margin: -8px 0 4px; }
+  #order .restored { background: rgba(61,85,63,.10); border: 1.5px solid var(--forest); border-radius: 12px; padding: 10px 14px; margin: 0 0 16px; font-size: 15px; font-weight: 600; color: var(--ink); }
   #order .save { display: inline-block; margin-top: 8px; font-size: 14px; color: var(--forest); font-weight: 600; text-decoration: none; border: 1.5px solid var(--forest); border-radius: 999px; padding: 7px 16px; }
   #order .upload { border: 2px dashed var(--soft-sage); border-radius: 14px; padding: 18px; text-align: center; cursor: pointer; margin-top: 8px; background: rgba(232,225,212,.35); }
   #order .upload.has { border-style: solid; border-color: var(--forest); }
@@ -360,13 +362,15 @@
     <p class="terms terms-before-form">แบบฟอร์มนี้เก็บชื่อ อีเมล ภาพสลิป และคำตอบว่ารู้จักเล่มนี้จากไหน ถ้าคุณตอบ อ่านว่าผมใช้ทำอะไร เก็บนานแค่ไหน และส่งให้ใครบ้าง ได้ที่<a href="privacy/">ประกาศความเป็นส่วนตัว</a></p>
     <!-- แบบฟอร์มสั่งซื้อ (20 ต.ค. 2569): HTML/JS ในหน้านี้เอง ส่งข้อมูลไป Apps Script "BooksByDan" (doPost คืน JSON · ตรวจสลิป EasySlip · ลงชีต · ส่งไฟล์) ด้วย fetch
          เลิกใช้ iframe/หน้าของ Google เพราะเบราว์เซอร์ในแอป IG/TikTok/FB บน iPhone แสดงหน้า Google ไม่ได้ · หน้า Google (doGet) ยังอยู่เป็นทางสำรองของ Dan ไม่โชว์ลูกค้า
-         ข้อความทุกคำต้องตรงกับหน้าสำรองใน ระบบรับเงิน/dev/BooksByDan.readable.js (getShopPageHTML) · ตัวเลือก "รู้จักจากไหน" ต้องตรงกับ CONFIG.SOURCES (harness ตรวจ) -->
+         ข้อความทุกคำต้องตรงกับหน้าสำรองใน ระบบรับเงิน/dev/BooksByDan.readable.js (getShopPageHTML) · ตัวเลือก "รู้จักจากไหน" ต้องตรงกับ CONFIG.SOURCES (harness ตรวจ)
+         ยกเว้นชั่วคราว (23 ต.ค. 2569): ข้อความ "ไม่ต้องโอนซ้ำ" 3 จุด (paid-note · restored · hint ใต้ QR) ยังไม่ได้ใส่หน้าสำรอง Dan ให้ตามทีหลัง -->
     <div id="order">
 
       <!-- ① ข้อมูลผู้ซื้อ -->
       <div id="of-step1">
         <h3>สั่งซื้อ เปิดไพ่ ฟังใจ</h3>
         <p class="sub">กรอกข้อมูลสั้น ๆ แล้วสแกน QR โอนเงิน ไฟล์ส่งเข้าอีเมลทันทีที่ระบบตรวจสลิปผ่านครับ</p>
+        <p class="hint paid-note">โอนไปแล้ว แต่หน้าเว็บกลับมาที่ขั้นนี้? กรอกชื่อและอีเมลเดิม กด "ไปชำระเงิน" แล้วแนบสลิปเดิมได้เลย ไม่ต้องโอนซ้ำครับ</p>
         <label for="of-name">ชื่อ <small>(ใช้ในหลักฐานการซื้อ)</small></label>
         <input type="text" id="of-name" autocomplete="name" maxlength="80">
         <label for="of-email">อีเมลสำหรับรับไฟล์</label>
@@ -402,6 +406,7 @@
 
       <!-- ② QR + สลิป -->
       <div id="of-step2" hidden>
+        <div class="restored" id="of-restored" hidden>กลับมาแล้วครับ ถ้าโอนเรียบร้อยแล้ว ไม่ต้องโอนซ้ำ แนบรูปสลิปด้านล่างได้เลย</div>
         <h3>สแกน QR เพื่อโอน</h3>
         <p class="sub" style="margin-bottom:14px">ยอดจะขึ้นในแอปธนาคารเอง ไม่ต้องพิมพ์ครับ</p>
         <div class="amount">
@@ -412,6 +417,7 @@
         <div class="qr" id="of-qrBox"></div>
         <div style="text-align:center"><a class="save" id="of-saveQr" href="#" download="promptpay.png" hidden>บันทึกรูป QR</a></div>
         <p class="hint"><b>เปิดจากมือถือ:</b> แคปหน้าจอ (หรือกดค้างที่รูป QR) → เปิดแอปธนาคาร → สแกน → เลือกรูปจากอัลบั้ม<br><b>เปิดจากคอม:</b> สแกนหน้าจอด้วยแอปธนาคารได้เลย</p>
+        <p class="hint"><b>โอนเสร็จแล้ว</b> กลับมาที่หน้านี้แล้วแนบสลิปด้านล่าง ถ้าหน้าเว็บกลับไปขั้นแรก กรอกชื่อและอีเมลเดิม แล้วแนบสลิปเดิมได้เลย ไม่ต้องโอนซ้ำครับ</p>
         <label>โอนแล้ว แนบรูปสลิปตรงนี้</label>
         <div class="upload" id="of-upBox">
           <div class="ic" id="of-upIc">📎</div>
@@ -604,6 +610,33 @@
     img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
   }
 
+  // จำขั้น 2 ไว้ในเครื่องลูกค้า (23 ต.ค. 2569 · BK-0004): สลับไปแอปธนาคารแล้วหน้าเว็บโหลดใหม่ ขั้น 2 หาย ลูกค้าต้องกรอกใหม่และเห็น QR ให้โอนอีกรอบ
+  // ใช้ localStorage เพราะอยู่รอดแม้เบราว์เซอร์ในแอป FB/IG ปิดแล้วเปิดใหม่ · เก็บไม่เกิน 6 ชม. = อายุโทเคนราคา (CONFIG.TOKEN_HOURS)
+  // ไม่เก็บรูปสลิป · ลบเมื่อส่งสลิปสำเร็จ หรือเมื่อกดกลับไปแก้ชื่อ-อีเมล
+  var SAVE_KEY = 'bbd_checkout', SAVE_MS = 6 * 3600 * 1000;
+  function saveCheckout(r) {
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify({ at: Date.now(), r: r, f: { name: val('name'), email: val('email'), source: val('source'), sourceOther: val('sourceOther') } })); } catch (e) {}
+  }
+  function clearCheckout() { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} }
+  function loadCheckout() {
+    try {
+      var s = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null');
+      if (s && s.r && s.r.token && s.r.qrSvg && s.f && s.f.email && Date.now() - s.at < SAVE_MS) return s;
+    } catch (e) {}
+    clearCheckout();
+    return null;
+  }
+
+  // ขั้น 2 จากผล checkout (กดปุ่มเอง หรือดึงคืนจากที่จำไว้)
+  function showPay(r) {
+    state.token = r.token; state.price = r.price;
+    el('amt').textContent = r.amountText;
+    var tag = el('tierTag');
+    if (r.tier === 'launch') { tag.textContent = 'ราคาเปิดตัว · เหลืออีก ' + r.launchLeft + ' เล่ม'; tag.hidden = false; } else tag.hidden = true;
+    renderQr(r.qrSvg, r.amountText);
+    show('step1', false); show('step2', true); toTop();
+  }
+
   function goPay() {
     hideErr('err1');
     var name = val('name'), email = val('email').toLowerCase(), email2 = val('email2').toLowerCase();
@@ -616,12 +649,9 @@
       b.disabled = false; b.textContent = 'ไปชำระเงิน';
       if (err || !r) return showErr('err1', NET_ERR);
       if (!r.open) return showErr('err1', r.message || 'ระบบขัดข้อง กรุณาลองใหม่ครับ');
-      state.token = r.token; state.price = r.price;
-      el('amt').textContent = r.amountText;
-      var tag = el('tierTag');
-      if (r.tier === 'launch') { tag.textContent = 'ราคาเปิดตัว · เหลืออีก ' + r.launchLeft + ' เล่ม'; tag.hidden = false; } else tag.hidden = true;
-      renderQr(r.qrSvg, r.amountText);
-      show('step1', false); show('step2', true); toTop();
+      el('restored').hidden = true;
+      showPay(r);
+      saveCheckout(r);
     });
   }
 
@@ -653,6 +683,7 @@
       show('wait', false);
       if (err || !r) { show('step2', true); return showErr('err2', NET_ERR); }
       if (!r.success) { show('step2', true); return showErr('err2', r.message || 'ส่งไม่สำเร็จ กรุณาลองใหม่ครับ'); }
+      clearCheckout();
       var h;
       if (r.delivered) {
         h = '<div class="done"><div class="big">📬</div><h3>ส่งไฟล์เข้าอีเมลแล้วครับ</h3>' +
@@ -670,8 +701,9 @@
   }
 
   var sel = el('source');
+  function isOther() { return sel.value !== '' && sel.value === sel.options[sel.options.length - 1].value; }
   sel.addEventListener('change', function () {
-    var other = sel.value !== '' && sel.value === sel.options[sel.options.length - 1].value;
+    var other = isOther();
     el('sourceOther').hidden = !other;
     if (other) el('sourceOther').focus();
   });
@@ -680,7 +712,19 @@
   el('slip').addEventListener('change', onSlipPick);
   el('btn1').addEventListener('click', goPay);
   el('btn2').addEventListener('click', sendSlip);
-  el('back').addEventListener('click', function () { show('step2', false); show('step1', true); toTop(); });
+  el('back').addEventListener('click', function () { clearCheckout(); el('restored').hidden = true; show('step2', false); show('step1', true); toTop(); });
+
+  // เปิดหน้าใหม่ภายใน 6 ชม. หลังกด "ไปชำระเงิน" → กลับมาที่ขั้น 2 พร้อมข้อมูลเดิม + ป้าย "ไม่ต้องโอนซ้ำ"
+  var saved = loadCheckout();
+  if (saved) {
+    var f = saved.f;
+    el('name').value = f.name || ''; el('email').value = f.email; el('email2').value = f.email;
+    sel.value = f.source || ''; if (sel.selectedIndex < 0) sel.value = '';
+    el('sourceOther').value = f.sourceOther || ''; el('sourceOther').hidden = !isOther();
+    el('accept').checked = true;
+    el('restored').hidden = false;
+    showPay(saved.r);
+  }
 })();
 </script>
 </body>
