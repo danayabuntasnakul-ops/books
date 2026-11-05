@@ -304,25 +304,25 @@
     <div class="samples">
       <a class="sample" href="images/sample-p20.jpg" target="_blank" rel="noopener">
         <figure style="margin:0">
-          <img src="images/sample-p20.jpg" alt="ตัวอย่างหน้า ภาค 1 ไพ่ชุดใหญ่" loading="lazy" width="1008" height="1428">
+          <img src="images/sample-p20-s.jpg" alt="ตัวอย่างหน้า ภาค 1 ไพ่ชุดใหญ่" width="500" height="708">
           <figcaption>ภาค 1 · ไพ่ชุดใหญ่ ดูภาพแล้วอ่านความหมาย</figcaption>
         </figure>
       </a>
       <a class="sample" href="images/sample-p44.jpg" target="_blank" rel="noopener">
         <figure style="margin:0">
-          <img src="images/sample-p44.jpg" alt="ตัวอย่างหน้า ภาค 2 ชุดฮีลใจ" loading="lazy" width="1008" height="1428">
+          <img src="images/sample-p44-s.jpg" alt="ตัวอย่างหน้า ภาค 2 ชุดฮีลใจ" width="500" height="708">
           <figcaption>ภาค 2 · หน้าชุดฮีลใจ มีที่ให้เขียน</figcaption>
         </figure>
       </a>
       <a class="sample" href="images/sample-p112.jpg" target="_blank" rel="noopener">
         <figure style="margin:0">
-          <img src="images/sample-p112.jpg" alt="ตัวอย่างหน้า ภาค 3 วางไพ่สองทางเลือก" loading="lazy" width="1008" height="1428">
+          <img src="images/sample-p112-s.jpg" alt="ตัวอย่างหน้า ภาค 3 วางไพ่สองทางเลือก" width="500" height="708">
           <figcaption>ภาค 3 · วางไพ่แบบสองทางเลือก</figcaption>
         </figure>
       </a>
       <a class="sample" href="images/sample-p127.jpg" target="_blank" rel="noopener">
         <figure style="margin:0">
-          <img src="images/sample-p127.jpg" alt="ตัวอย่างหน้า ภาค 4 ตัวอย่างการอ่านไพ่ 3 ใบ" loading="lazy" width="1008" height="1428">
+          <img src="images/sample-p127-s.jpg" alt="ตัวอย่างหน้า ภาค 4 ตัวอย่างการอ่านไพ่ 3 ใบ" width="500" height="708">
           <figcaption>ภาค 4 · ตัวอย่างการอ่านไพ่ 3 ใบ</figcaption>
         </figure>
       </a>
@@ -530,7 +530,7 @@
 /* แบบฟอร์มสั่งซื้อ (20 ต.ค. 2569): ① ชื่อ-อีเมล → ② QR ใส่ยอด + แนบสลิป → ③ ผล
    ส่ง JSON ไป Apps Script "BooksByDan" (doPost) ด้วย fetch POST แบบ text/plain → ไม่มี preflight · Google ตอบ 302 ไป googleusercontent พร้อม Access-Control-Allow-Origin: *
    จึงใช้ได้ในเบราว์เซอร์ของแอป IG/TikTok/FB บน iPhone ซึ่งแสดงหน้า HtmlService ของ Google ไม่ได้ (เหตุที่เลิกใช้ iframe)
-   ป้าย ?src= (ig · fb · tiktok · yt · sample · draw · line · metaada metaadb ttada ttadb) เก็บค่าแรกที่เข้ามาใน sessionStorage แล้วส่งไปกับคำสั่งซื้อ → คอลัมน์ src ในชีต */
+   ป้าย ?src= (ig · fb · tiktok · yt · sample · draw · line · metaada metaadb ttada ttadb) เก็บใน sessionStorage และ localStorage 7 วัน แล้วส่งไปกับคำสั่งซื้อ → คอลัมน์ src ในชีต */
 (function () {
   var API = 'https://script.google.com/macros/s/AKfycbx81ZE8uvhtCBztsZyHPNwYL8nXV3HN5XS8WJNB1lVd5BfxvpgY2t4vWbWT3SCplNImpQ/exec';
   var OWNER = 'artproducktion@gmail.com';
@@ -550,7 +550,19 @@
   var q = '';
   try { q = (new URLSearchParams(location.search).get('src') || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 20); } catch (e) {}
   state.src = q;
-  try { if (q) sessionStorage.setItem('bbd_src', q); state.src = sessionStorage.getItem('bbd_src') || q; } catch (e) {}
+  // คนเห็นแอดแล้วปิดแท็บ กลับมาซื้อทีหลังภายใน 7 วัน ป้ายยังอยู่ (ประกาศความเป็นส่วนตัวเขียนไว้ตามนี้)
+  var SRC_KEY = 'bbd_src', SRC_MS = 7 * 24 * 60 * 60 * 1000;
+  try {
+    if (q) {
+      sessionStorage.setItem(SRC_KEY, q);
+      localStorage.setItem(SRC_KEY, JSON.stringify({ v: q, at: Date.now() }));
+    } else if (!sessionStorage.getItem(SRC_KEY)) {
+      var keptSrc = JSON.parse(localStorage.getItem(SRC_KEY) || 'null');
+      if (keptSrc && keptSrc.v && Date.now() - keptSrc.at < SRC_MS) sessionStorage.setItem(SRC_KEY, keptSrc.v);
+      else localStorage.removeItem(SRC_KEY);
+    }
+    state.src = sessionStorage.getItem(SRC_KEY) || q;
+  } catch (e) {}
   // ปุ่ม "บันทึกรูป QR" ใช้ไม่ได้ในเบราว์เซอร์ของแอป IG/FB/TikTok/LINE → ไม่แสดง ให้แคปหน้าจอแทน
   state.inApp = /Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly|BytedanceWebview|Line\//i.test(navigator.userAgent);
 
